@@ -1,0 +1,11 @@
+.git
+.gitignore
+.impeccable
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+
+# raw, un-background-removed product photos — only processed ones ship
+assets/products/raw-*
