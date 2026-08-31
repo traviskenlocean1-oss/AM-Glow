@@ -44,7 +44,7 @@
       "url": "https://amglowup.com",
       "telephone": "+17865217657",
       "areaServed": { "@type": "City", "name": "Miami" },
-      "sameAs": ["https://www.tiktok.com/@anthonyesuffrin3"]
+      "sameAs": ["https://www.tiktok.com/@anthonyesuffrin3", "https://www.facebook.com/share/1HNDDVUQiF/?mibextid=wwXIfr", "https://www.instagram.com/gigitsea/"]
     },
     {
       "@type": "WebSite",
@@ -72,11 +72,11 @@
     --ink-soft:#6b5a60;
     --paper:#ffffff;
     --paper-soft:#fff6f9;
-    --pink:#ff2e86;
-    --pink-deep:#b5115f;
+    --pink:#ff1478;
+    --pink-deep:#9e0052;
     --pink-pale:#ffe1ee;
     --line:#f2dde5;
-    --shadow:0 20px 60px rgba(255,46,134,0.12);
+    --shadow:0 20px 60px rgba(255,20,120,0.16);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:auto}
@@ -84,6 +84,7 @@
     background:var(--paper);
     color:var(--ink);
     font-family:'Montserrat',system-ui,-apple-system,sans-serif;
+    line-height:1.5;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
   }
@@ -137,10 +138,8 @@
   .hero-h1 .rev span{display:inline-block;will-change:transform}
   .hero-p{font-size:18px;color:var(--ink-soft);max-width:440px;margin:0 0 34px;line-height:1.65}
   .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;transition:transform .2s ease,box-shadow .2s ease}
-  .btn-pink{background:var(--pink);color:#fff;box-shadow:0 14px 34px rgba(255,46,134,0.32)}
-  .btn-pink:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(255,46,134,0.4)}
-  .btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
-  .btn-outline:hover{background:var(--ink);color:#fff}
+  .btn-pink{background:var(--pink);color:#fff;box-shadow:0 14px 34px rgba(255,20,120,0.38)}
+  .btn-pink:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(255,20,120,0.48)}
   .hero-stats{display:flex;justify-content:flex-start;gap:44px;margin-top:56px;flex-wrap:wrap}
   .hero-stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--pink)}
   .hero-stat span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
@@ -165,18 +164,17 @@
   /* ── Category pills ── */
   .cat-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:44px}
   .cat-pill{padding:10px 22px;border-radius:999px;border:1.5px solid var(--line);font-size:13px;font-weight:700;letter-spacing:.02em;transition:all .2s ease}
-  .cat-pill.active,.cat-pill:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .cat-pill.active,.cat-pill:hover{background:var(--pink);color:#fff;border-color:var(--pink)}
 
   /* ── Product grid ── */
   .shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
   .p-card{cursor:pointer;position:relative}
-  .p-card .p-media{position:relative;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:var(--paper-soft);margin-bottom:14px}
+  .p-card .p-media{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--paper-soft);margin-bottom:14px;transition:transform .35s ease,box-shadow .35s ease}
   .p-media .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--pink-deep);font-size:15px;background:linear-gradient(150deg,var(--pink-pale),#fff 65%)}
   .p-tag{position:absolute;top:12px;left:12px;background:#fff;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
   .p-quick{position:absolute;bottom:12px;left:12px;right:12px;background:var(--ink);color:#fff;text-align:center;padding:11px;border-radius:12px;font-size:12px;font-weight:700;letter-spacing:.04em;opacity:0;transform:translateY(8px);transition:all .25s ease}
   .p-card:hover .p-quick{opacity:1;transform:none}
-  .p-card:hover .p-media{transform:scale(1.02)}
-  .p-media{transition:transform .35s ease}
+  .p-card:hover .p-media{transform:translateY(-3px);box-shadow:var(--shadow)}
   .p-name{font-weight:600;font-size:15px;margin-bottom:3px}
   .p-price{color:var(--pink-deep);font-weight:800;font-size:15px}
   .p-price s{color:var(--ink-soft);font-weight:500;margin-right:6px;opacity:.6}
@@ -218,7 +216,7 @@
   /* ── Cart drawer ── */
   .overlay{position:fixed;inset:0;background:rgba(36,19,24,0.45);opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:200}
   .overlay.open{opacity:1;pointer-events:auto}
-  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);background:#fff;z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);background:#fff;z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(36,19,24,0.18)}
   .drawer.open{transform:none}
   .drawer-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
   .drawer-head h3{font-size:22px}
@@ -239,11 +237,11 @@
   /* ── Modal (product + checkout) ── */
   .modal{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
   .modal.open{opacity:1;pointer-events:auto}
-  .modal-card{background:#fff;border-radius:22px;max-width:820px;width:100%;max-height:88vh;overflow-y:auto;position:relative;transform:translateY(20px);transition:transform .3s ease}
+  .modal-card{background:#fff;border-radius:22px;max-width:820px;width:100%;max-height:88vh;overflow-y:auto;position:relative;transform:translateY(20px);transition:transform .3s ease;box-shadow:0 30px 80px rgba(36,19,24,0.25)}
   .modal.open .modal-card{transform:none}
   .modal-close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:var(--paper-soft);display:flex;align-items:center;justify-content:center;z-index:2}
   .pm-grid{display:grid;grid-template-columns:1fr 1fr}
-  .pm-photo{aspect-ratio:3/4;background:linear-gradient(150deg,var(--pink-pale),#fff);border-radius:22px 0 0 22px;display:flex;align-items:center;justify-content:center;color:var(--pink-deep);font-family:'Cormorant Garamond',serif;font-style:italic}
+  .pm-photo{aspect-ratio:3/4;background:linear-gradient(150deg,var(--pink-pale),#fff);border-radius:12px 0 0 12px;display:flex;align-items:center;justify-content:center;color:var(--pink-deep);font-family:'Cormorant Garamond',serif;font-style:italic}
   .pm-body{padding:36px}
   .pm-body h3{font-size:30px;margin-bottom:8px}
   .pm-body .price{font-size:20px;font-weight:800;color:var(--pink-deep);margin-bottom:16px}
@@ -263,7 +261,7 @@
     .nav-dropdown-panel a{padding:7px 0}
     .support-bar{justify-content:center;text-align:center}
     .support-shipping{display:none}
-    .pm-photo{border-radius:22px 22px 0 0;aspect-ratio:16/10}
+    .pm-photo{border-radius:12px 12px 0 0;aspect-ratio:16/10}
     .hero-stats{gap:28px}
   }
 </style>
@@ -372,6 +370,14 @@
           <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.28 0 .55.04.79.13V9.66a5.9 5.9 0 0 0-.79-.05A5.94 5.94 0 0 0 4 15.55a5.94 5.94 0 0 0 5.94 5.94A5.94 5.94 0 0 0 15.87 15.55V9.5a7.35 7.35 0 0 0 4.19 1.31V7.72a4.28 4.28 0 0 1-3.46-1.9z"/></svg></span>
           <div><div style="font-weight:700;font-size:14px">@anthonyesuffrin3</div><div style="font-size:12px;color:var(--ink-soft)" data-i18n="contact.tiktokText">Shop with us on TikTok</div></div>
         </a>
+        <a href="https://www.facebook.com/share/1HNDDVUQiF/?mibextid=wwXIfr" target="_blank" rel="noopener" class="contact-chip">
+          <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg></span>
+          <div><div style="font-weight:700;font-size:14px">Facebook</div><div style="font-size:12px;color:var(--ink-soft)" data-i18n="contact.facebookText">Follow us on Facebook</div></div>
+        </a>
+        <a href="https://www.instagram.com/gigitsea/" target="_blank" rel="noopener" class="contact-chip">
+          <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></span>
+          <div><div style="font-weight:700;font-size:14px">@gigitsea</div><div style="font-size:12px;color:var(--ink-soft)" data-i18n="contact.instagramText">Follow us on Instagram</div></div>
+        </a>
       </div>
     </div>
   </div>
@@ -387,6 +393,8 @@
       <div class="foot-social">
         <a href="tel:+17865217657" aria-label="Call"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
         <a href="https://www.tiktok.com/@anthonyesuffrin3" target="_blank" rel="noopener" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.28 0 .55.04.79.13V9.66a5.9 5.9 0 0 0-.79-.05A5.94 5.94 0 0 0 4 15.55a5.94 5.94 0 0 0 5.94 5.94A5.94 5.94 0 0 0 15.87 15.55V9.5a7.35 7.35 0 0 0 4.19 1.31V7.72a4.28 4.28 0 0 1-3.46-1.9z"/></svg></a>
+        <a href="https://www.facebook.com/share/1HNDDVUQiF/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg></a>
+        <a href="https://www.instagram.com/gigitsea/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -471,6 +479,7 @@ var I18N = {
     'contact.eyebrow':'Get In Touch','contact.title':'Questions? Send a Message',
     'contact.name':'Full Name','contact.phoneEmail':'Phone or Email','contact.message':'Message',
     'contact.send':'Send Message','contact.callText':'Call or text','contact.tiktokText':'Shop with us on TikTok',
+    'contact.facebookText':'Follow us on Facebook','contact.instagramText':'Follow us on Instagram',
     'footer.tag':'Curated resale, Miami, FL.','footer.rights':'All rights reserved.','footer.built':'Miami, FL',
     'cart.title':'Your Bag','cart.subtotal':'Subtotal','cart.checkout':'Checkout','cart.add':'Add to Bag',
     'cart.empty':'Your bag is empty.','cart.continue':'Continue Shopping',
@@ -492,6 +501,7 @@ var I18N = {
     'contact.eyebrow':'Kontakte Nou','contact.title':'Gen Kesyon? Voye yon Mesaj',
     'contact.name':'Non Konplè','contact.phoneEmail':'Telefòn oswa Imèl','contact.message':'Mesaj',
     'contact.send':'Voye Mesaj','contact.callText':'Rele oswa tèks','contact.tiktokText':'Achte avèk nou sou TikTok',
+    'contact.facebookText':'Swiv nou sou Facebook','contact.instagramText':'Swiv nou sou Instagram',
     'footer.tag':'Rezanti chwazi, Miami, FL.','footer.rights':'Tout dwa rezève.','footer.built':'Miami, FL',
     'cart.title':'Sak Ou','cart.subtotal':'Total Pasyèl','cart.checkout':'Peye Kounye a','cart.add':'Mete nan Sak',
     'cart.empty':'Sak ou vid.','cart.continue':'Kontinye Achte',
@@ -513,6 +523,7 @@ var I18N = {
     'contact.eyebrow':'Contáctanos','contact.title':'¿Preguntas? Envía un Mensaje',
     'contact.name':'Nombre Completo','contact.phoneEmail':'Teléfono o Correo','contact.message':'Mensaje',
     'contact.send':'Enviar Mensaje','contact.callText':'Llama o envía un mensaje','contact.tiktokText':'Compra con nosotros en TikTok',
+    'contact.facebookText':'Síguenos en Facebook','contact.instagramText':'Síguenos en Instagram',
     'footer.tag':'Reventa curada, Miami, FL.','footer.rights':'Todos los derechos reservados.','footer.built':'Miami, FL',
     'cart.title':'Tu Bolsa','cart.subtotal':'Subtotal','cart.checkout':'Pagar','cart.add':'Añadir a la Bolsa',
     'cart.empty':'Tu bolsa está vacía.','cart.continue':'Seguir Comprando',
