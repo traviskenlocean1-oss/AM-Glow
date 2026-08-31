@@ -9,3 +9,6 @@
 
 # raw, un-background-removed product photos — only processed ones ship
 assets/products/raw-*
+
+# raw MiniMax source renders — only the cropped/keyed finals ship
+assets/brand/*-source.png
