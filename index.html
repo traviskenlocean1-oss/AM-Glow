@@ -98,15 +98,16 @@
   .script{font-style:italic;font-weight:600;color:var(--pink)}
 
   /* ── Nav ── */
-  /* Anchor targets need this so a jump to #shop/#about/#contact doesn't
+  /* Anchor targets need this so a jump to #shop/#contact doesn't
      land the section's top edge underneath the fixed nav bar. */
-  #shop,#about,#contact{scroll-margin-top:124px}
+  #shop,#contact{scroll-margin-top:124px}
   #nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.88);backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s ease,box-shadow .3s ease}
   #nav.scrolled{border-color:var(--line);box-shadow:0 4px 24px rgba(0,0,0,0.04)}
-  .support-bar{background:var(--pink-deep);color:#fff;text-align:center;padding:8px 16px;font-size:12px;font-weight:600;letter-spacing:.02em}
+  .support-bar{background:var(--pink-deep);color:#fff;padding:8px 16px;font-size:12px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1240px;margin:0 auto}
   .support-bar a{display:inline-flex;align-items:center;gap:7px;color:#fff}
   .support-bar a:hover{text-decoration:underline}
   .support-bar svg{flex-shrink:0}
+  .support-shipping{display:flex;align-items:center;gap:7px;white-space:nowrap}
   .nav-inner{max-width:1240px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px}
   .logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:26px;letter-spacing:.01em}
   .logo span{color:var(--pink)}
@@ -169,15 +170,19 @@
   .p-price{color:var(--pink-deep);font-weight:800;font-size:15px}
   .p-price s{color:var(--ink-soft);font-weight:500;margin-right:6px;opacity:.6}
 
-  /* ── About ── */
-  #about{background:var(--paper-soft)}
-  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
-  .about-photo{aspect-ratio:4/5;border-radius:24px;background:linear-gradient(155deg,var(--pink),var(--pink-deep));position:relative;overflow:hidden;box-shadow:var(--shadow)}
-  .about-photo::after{content:'Photo Coming Soon';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px}
-  .about-p{color:var(--ink-soft);line-height:1.75;font-size:16px;margin:20px 0 26px}
-  .about-list{display:flex;flex-direction:column;gap:14px;margin-bottom:30px}
-  .about-list li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink)}
-  .about-list b{color:var(--pink)}
+  /* ── Categories dropdown ── */
+  .nav-dropdown{position:relative}
+  .nav-dropdown-trigger{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--ink);font-family:inherit}
+  .nav-dropdown-trigger svg{transition:transform .2s ease}
+  .nav-dropdown.open .nav-dropdown-trigger svg{transform:rotate(180deg)}
+  .nav-dropdown-panel{list-style:none;display:none}
+  .nav-dropdown.open .nav-dropdown-panel{display:block}
+  .nav-dropdown-panel a{display:block;font-size:13px;font-weight:600;color:var(--ink-soft)}
+  @media(min-width:901px){
+    .nav-dropdown-panel{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 45px rgba(36,19,24,0.12);padding:10px;min-width:180px;z-index:10}
+    .nav-dropdown-panel a{padding:9px 14px;border-radius:8px;white-space:nowrap}
+    .nav-dropdown-panel a:hover{background:var(--paper-soft);color:var(--pink-deep)}
+  }
 
   /* ── Contact ── */
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
@@ -239,7 +244,11 @@
     .nav-links,.nav-actions .lang-toggle{display:none}
     .burger{display:block}
     .shop-grid{grid-template-columns:repeat(2,1fr)}
-    .about-grid,.contact-grid,.pm-grid{grid-template-columns:1fr}
+    .contact-grid,.pm-grid{grid-template-columns:1fr}
+    .nav-dropdown-panel{padding-left:12px;margin-top:12px}
+    .nav-dropdown-panel a{padding:7px 0}
+    .support-bar{justify-content:center;text-align:center}
+    .support-shipping{display:none}
     .pm-photo{border-radius:22px 22px 0 0;aspect-ratio:16/10}
     .hero-stats{gap:28px}
   }
@@ -253,12 +262,22 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.88L4 20l4.24-1.11a7.9 7.9 0 0 0 3.8.97h.01a7.94 7.94 0 0 0 5.55-13.54zM12.05 18.4a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.66.67-2.44-.16-.25a6.59 6.59 0 0 1 10.2-8.2 6.55 6.55 0 0 1 1.94 4.67 6.6 6.6 0 0 1-6.55 6.62zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.78-.11.13-.23.15-.43.05-.2-.1-.83-.31-1.58-.98-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34-.12-.01-.25-.01-.38-.01a.73.73 0 0 0-.53.25c-.18.19-.7.69-.7 1.67 0 .99.72 1.94.82 2.08.1.13 1.4 2.14 3.4 3 .47.2.84.32 1.13.42.48.15.91.13 1.25.08.38-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
       <span data-i18n="support.whatsapp">Customer Support (WhatsApp)</span>&nbsp;· (786) 521-7657
     </a>
+    <span class="support-shipping">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="14" height="10"/><path d="M15 10h4l3 3v3h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="17.5" cy="19" r="2"/></svg>
+      <span data-i18n="support.shipping">Free Shipping on Orders Over $99</span>
+    </span>
   </div>
   <div class="nav-inner">
     <a href="#hero" class="logo">A.M. <span>Glow Up</span></a>
     <ul class="nav-links">
       <li><a href="#shop" data-i18n="nav.shop">Shop</a></li>
-      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li class="nav-dropdown" id="catDropdown">
+        <button class="nav-dropdown-trigger" id="catDropdownTrigger" aria-expanded="false">
+          <span data-i18n="nav.categories">Categories</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <ul class="nav-dropdown-panel" id="catDropdownPanel"></ul>
+      </li>
       <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
@@ -298,23 +317,6 @@
     </div>
     <div class="cat-pills" id="catPills"></div>
     <div class="shop-grid" id="shopGrid"></div>
-  </div>
-</section>
-
-<section id="about" class="section">
-  <div class="wrap about-grid">
-    <div class="about-photo reveal-up"></div>
-    <div class="reveal-up">
-      <span class="eyebrow" data-i18n="about.eyebrow">Our Story</span>
-      <h2 data-i18n="about.title">Not just secondhand. Chosen.</h2>
-      <p class="about-p" data-i18n="about.p">A.M. Glow Up started the way most good things do — one great find at a time. Every piece is sourced, inspected, and priced by hand before it ever reaches you. No mass drops, no guesswork. Just real pieces, picked with a real eye.</p>
-      <ul class="about-list">
-        <li><b>01.</b><span data-i18n="about.li1">Every item is hand-selected, never bulk-sourced.</span></li>
-        <li><b>02.</b><span data-i18n="about.li2">Checked for quality before it's ever listed.</span></li>
-        <li><b>03.</b><span data-i18n="about.li3">Site available in English and Kreyòl.</span></li>
-      </ul>
-      <a href="#shop" class="btn btn-outline" data-i18n="hero.cta">Shop Now</a>
-    </div>
   </div>
 </section>
 
@@ -440,17 +442,12 @@
 ═══════════════════════════════════════════════ */
 var I18N = {
   en: {
-    'support.whatsapp':'Customer Support (WhatsApp)',
-    'nav.shop':'Shop','nav.about':'About','nav.contact':'Contact',
+    'support.whatsapp':'Customer Support (WhatsApp)','support.shipping':'Free Shipping on Orders Over $99',
+    'nav.shop':'Shop','nav.categories':'Categories','nav.contact':'Contact',
     'hero.eyebrow':'Based in Miami, FL','hero.title':'Every piece, hand-picked.',
     'hero.sub':"Skincare, fragrance, and wellness finds, sourced with care and resold at prices that actually make sense — one drop at a time.",
     'hero.cta':'Shop Now','hero.stat1':'One of a Kind','hero.stat3':'Shipped From',
     'shop.eyebrow':'The Collection','shop.title':'Shop the Drop','cat.all':'All',
-    'about.eyebrow':'Our Story','about.title':'Not just secondhand. Chosen.',
-    'about.p':"A.M. Glow Up started the way most good things do — one great find at a time. Every piece is sourced, inspected, and priced by hand before it ever reaches you. No mass drops, no guesswork. Just real pieces, picked with a real eye.",
-    'about.li1':'Every item is hand-selected, never bulk-sourced.',
-    'about.li2':"Checked for quality before it's ever listed.",
-    'about.li3':'Site available in English and Kreyòl.',
     'contact.eyebrow':'Get In Touch','contact.title':'Questions? Send a Message',
     'contact.name':'Full Name','contact.phoneEmail':'Phone or Email','contact.message':'Message',
     'contact.send':'Send Message','contact.callText':'Call or text','contact.tiktokText':'Shop with us on TikTok',
@@ -466,17 +463,12 @@ var I18N = {
     'contact.successTitle':'Message Sent','contact.successBody':"Thanks for reaching out — we'll get back to you shortly."
   },
   ht: {
-    'support.whatsapp':'Sipò Kliyan (WhatsApp)',
-    'nav.shop':'Boutik','nav.about':'Konsènan Nou','nav.contact':'Kontakte Nou',
+    'support.whatsapp':'Sipò Kliyan (WhatsApp)','support.shipping':'Livrezon Gratis pou Kòmand $99+',
+    'nav.shop':'Boutik','nav.categories':'Kategori','nav.contact':'Kontakte Nou',
     'hero.eyebrow':'Baze nan Miami, FL','hero.title':'Chak pyès, chwazi ak men.',
     'hero.sub':'Pwodwi po, pafen, ak byennèt, chwazi ak swen epi vann a bon pri — yon nouvo dwòp alafwa.',
     'hero.cta':'Achte Kounye a','hero.stat1':'Inik','hero.stat3':'Anvwaye Soti Nan',
     'shop.eyebrow':'Koleksyon An','shop.title':'Achte Nouvo Dwòp La','cat.all':'Tout',
-    'about.eyebrow':'Istwa Nou','about.title':'Se pa senpleman dezyèm men. Se chwazi.',
-    'about.p':"A.M. Glow Up kòmanse jan pi bon bagay yo toujou kòmanse — yon bon jwenn alafwa. Chak pyès chwazi, verifye, epi pri li mete ak men anvan li rive jwenn ou. Pa gen gwo dwòp an mas, pa gen deviné. Se sèlman bon pyès, chwazi ak yon bon je.",
-    'about.li1':'Chak atik chwazi ak men, pa janm an gwo kantite.',
-    'about.li2':'Verifye pou kalite anvan li mete sou sit la.',
-    'about.li3':'Sit disponib an Anglè ak Kreyòl.',
     'contact.eyebrow':'Kontakte Nou','contact.title':'Gen Kesyon? Voye yon Mesaj',
     'contact.name':'Non Konplè','contact.phoneEmail':'Telefòn oswa Imèl','contact.message':'Mesaj',
     'contact.send':'Voye Mesaj','contact.callText':'Rele oswa tèks','contact.tiktokText':'Achte avèk nou sou TikTok',
@@ -511,6 +503,7 @@ function applyLang(lang) {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
   renderCatPills();
+  renderNavCategories();
   renderShopGrid();
   renderCart();
 }
@@ -574,6 +567,24 @@ function renderCatPills() {
     btn.addEventListener('click', function() {
       activeCat = btn.getAttribute('data-cat');
       renderCatPills(); renderShopGrid();
+    });
+  });
+}
+
+function renderNavCategories() {
+  var cats = PRODUCTS.map(function(p){return p.cat}).filter(function(c,i,a){return a.indexOf(c)===i});
+  var panel = document.getElementById('catDropdownPanel');
+  panel.innerHTML = cats.map(function(c) {
+    return '<li><a href="#shop" data-cat="'+c+'">'+c+'</a></li>';
+  }).join('');
+  panel.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      activeCat = a.getAttribute('data-cat');
+      renderCatPills(); renderShopGrid();
+      document.getElementById('catDropdown').classList.remove('open');
+      document.getElementById('catDropdownTrigger').setAttribute('aria-expanded', 'false');
+      var mobileLinks = document.querySelector('.nav-links');
+      if (mobileLinks.style.display === 'flex') mobileLinks.style.cssText = '';
     });
   });
 }
@@ -702,6 +713,19 @@ document.getElementById('burger').addEventListener('click', function() {
   var links = document.querySelector('.nav-links');
   var open = links.style.display === 'flex';
   links.style.cssText = open ? '' : 'display:flex;flex-direction:column;position:fixed;top:70px;left:0;right:0;background:#fff;padding:24px 28px;gap:20px;box-shadow:0 12px 30px rgba(0,0,0,0.08)';
+});
+
+document.getElementById('catDropdownTrigger').addEventListener('click', function() {
+  var dropdown = document.getElementById('catDropdown');
+  var open = dropdown.classList.toggle('open');
+  this.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+document.addEventListener('click', function(e) {
+  var dropdown = document.getElementById('catDropdown');
+  if (!dropdown.contains(e.target)) {
+    dropdown.classList.remove('open');
+    document.getElementById('catDropdownTrigger').setAttribute('aria-expanded', 'false');
+  }
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
