@@ -183,7 +183,7 @@
 
   /* ── Categories dropdown ── */
   .nav-dropdown{position:relative}
-  .nav-dropdown-trigger{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--ink);font-family:inherit}
+  .nav-dropdown-trigger{display:flex;align-items:center;gap:5px;font-size:17px;font-weight:700;letter-spacing:.02em;color:var(--ink);font-family:inherit}
   .nav-dropdown-trigger svg{transition:transform .2s ease}
   .nav-dropdown.open .nav-dropdown-trigger svg{transform:rotate(180deg)}
   .nav-dropdown-panel{list-style:none;display:none}
@@ -297,6 +297,7 @@
     <div class="nav-actions">
       <div class="lang-toggle">
         <button data-lang="en" class="active">EN</button>
+        <button data-lang="es">ES</button>
         <button data-lang="ht">KREY</button>
       </div>
       <button class="cart-btn" id="cartOpen" aria-label="Open cart">
@@ -501,6 +502,27 @@ var I18N = {
     'checkout.successTitle':'Kòmand Voye',
     'checkout.successBody':'Nou resevwa kòmand ou — n ap kontakte ou pa telefòn oswa TikTok pou konfime ak ranje peman.',
     'contact.successTitle':'Mesaj Voye','contact.successBody':'Mèsi paske ou kontakte nou — n ap reponn ou byento.'
+  },
+  es: {
+    'support.whatsapp':'Atención al Cliente (WhatsApp)','support.shipping':'Envío Gratis en Pedidos de $99+',
+    'nav.shop':'Tienda','nav.categories':'Categorías','nav.contact':'Contacto',
+    'hero.eyebrow':'Con Base en Miami, FL','hero.title':'Cada pieza, elegida a mano.',
+    'hero.sub':'Productos de belleza, fragancias y bienestar, elegidos con cuidado y revendidos a precios que sí tienen sentido — una gota a la vez.',
+    'hero.cta':'Comprar Ahora','hero.stat1':'Única en su Tipo','hero.stat3':'Enviado Desde',
+    'shop.eyebrow':'La Colección','shop.title':'Compra lo Nuevo','cat.all':'Todo',
+    'contact.eyebrow':'Contáctanos','contact.title':'¿Preguntas? Envía un Mensaje',
+    'contact.name':'Nombre Completo','contact.phoneEmail':'Teléfono o Correo','contact.message':'Mensaje',
+    'contact.send':'Enviar Mensaje','contact.callText':'Llama o envía un mensaje','contact.tiktokText':'Compra con nosotros en TikTok',
+    'footer.tag':'Reventa curada, Miami, FL.','footer.rights':'Todos los derechos reservados.','footer.built':'Miami, FL',
+    'cart.title':'Tu Bolsa','cart.subtotal':'Subtotal','cart.checkout':'Pagar','cart.add':'Añadir a la Bolsa',
+    'cart.empty':'Tu bolsa está vacía.','cart.continue':'Seguir Comprando',
+    'product.desc':'Verificado por autenticidad y condición antes de enviarse. Una vez que se acaba, se acabó.',
+    'checkout.title':'Ya casi está','checkout.sub':'Los pagos en línea se están finalizando — por ahora confirmaremos tu pedido por teléfono o TikTok.',
+    'checkout.phone':'Número de Teléfono','checkout.address':'Dirección de Entrega','checkout.payment':'Método de Pago',
+    'checkout.payLater':'Confirmar por teléfono / TikTok','checkout.payCard':'Tarjeta — próximamente','checkout.place':'Realizar Pedido',
+    'checkout.successTitle':'Pedido Enviado',
+    'checkout.successBody':'Ya tenemos tu pedido — te contactaremos por teléfono o TikTok pronto para confirmar y coordinar el pago.',
+    'contact.successTitle':'Mensaje Enviado','contact.successBody':'Gracias por escribirnos — te responderemos pronto.'
   }
 };
 var currentLang = localStorage.getItem('amg_lang') || 'en';
