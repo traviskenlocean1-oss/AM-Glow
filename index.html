@@ -9,8 +9,8 @@
      SEO — Primary Meta
 ═══════════════════════════════════════════════════════════ -->
 <title>A.M. Glow Up | Curated Resale Boutique in Miami, FL</title>
-<meta name="description" content="Hand-picked secondhand fashion finds, resold with care. A.M. Glow Up is a Miami-based resale boutique — shop tops, dresses, accessories and more, curated one piece at a time." />
-<meta name="keywords" content="resale boutique Miami, secondhand fashion, thrifted clothing Miami, curated resale, A.M. Glow Up" />
+<meta name="description" content="Hand-picked beauty, skincare, and wellness finds, resold with care. A.M. Glow Up is a Miami-based resale boutique — shop skincare, fragrance, hair care and more, curated one piece at a time." />
+<meta name="keywords" content="beauty resale Miami, skincare resale, fragrance resale, wellness resale, curated beauty finds, A.M. Glow Up" />
 <meta name="author" content="A.M. Glow Up" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 <meta name="theme-color" content="#FF2E86" />
@@ -24,10 +24,10 @@
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content="https://amglowup.com/" />
 <meta property="og:title" content="A.M. Glow Up | Curated Resale Boutique in Miami, FL" />
-<meta property="og:description" content="Hand-picked secondhand fashion finds, resold with care. Shop the current drop." />
+<meta property="og:description" content="Hand-picked beauty and wellness finds, resold with care. Shop the current drop." />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="A.M. Glow Up | Curated Resale Boutique" />
-<meta name="twitter:description" content="Hand-picked secondhand fashion finds, resold with care." />
+<meta name="twitter:description" content="Hand-picked beauty and wellness finds, resold with care." />
 
 <!-- ═══════════════════════════════════════════════════════════
      JSON-LD — Organization + WebSite (no LocalBusiness/address claim —
@@ -98,6 +98,9 @@
   .script{font-style:italic;font-weight:600;color:var(--pink)}
 
   /* ── Nav ── */
+  /* Anchor targets need this so a jump to #shop/#about/#contact doesn't
+     land the section's top edge underneath the fixed nav bar. */
+  #shop,#about,#contact{scroll-margin-top:88px}
   #nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.88);backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s ease,box-shadow .3s ease}
   #nav.scrolled{border-color:var(--line);box-shadow:0 4px 24px rgba(0,0,0,0.04)}
   .nav-inner{max-width:1240px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px}
@@ -265,11 +268,10 @@
   <div class="wrap hero-inner">
     <span class="eyebrow" data-i18n="hero.eyebrow">Based in Miami, FL</span>
     <h1 class="hero-h1" id="heroTitle" data-i18n-split="hero.title">Every piece, hand-picked.</h1>
-    <p class="hero-p" data-i18n="hero.sub">Secondhand finds, reworked into a wardrobe worth showing off — resold with care, one drop at a time.</p>
+    <p class="hero-p" data-i18n="hero.sub">Skincare, fragrance, and wellness finds, sourced with care and resold at prices that actually make sense — one drop at a time.</p>
     <a href="#shop" class="btn btn-pink" data-i18n="hero.cta">Shop Now</a>
     <div class="hero-stats">
       <div class="hero-stat"><b>100%</b><span data-i18n="hero.stat1">One of a Kind</span></div>
-      <div class="hero-stat"><b>2</b><span data-i18n="hero.stat2">Languages</span></div>
       <div class="hero-stat"><b>MIA</b><span data-i18n="hero.stat3">Shipped From</span></div>
     </div>
   </div>
@@ -383,7 +385,7 @@
         <span class="p-tag" id="pmTag" style="position:static;display:inline-block;margin-bottom:12px"></span>
         <h3 id="pmName"></h3>
         <div class="price" id="pmPrice"></div>
-        <p data-i18n="product.desc">Gently inspected, true-to-size, and ready to ship. One of one — once it's gone, it's gone.</p>
+        <p data-i18n="product.desc">Checked for authenticity and condition before it ships. Once it's gone, it's gone.</p>
         <button class="btn btn-pink" id="pmAdd" style="width:100%;justify-content:center" data-i18n="cart.add">Add to Bag</button>
       </div>
     </div>
@@ -427,8 +429,8 @@ var I18N = {
   en: {
     'nav.shop':'Shop','nav.about':'About','nav.contact':'Contact',
     'hero.eyebrow':'Based in Miami, FL','hero.title':'Every piece, hand-picked.',
-    'hero.sub':"Secondhand finds, reworked into a wardrobe worth showing off — resold with care, one drop at a time.",
-    'hero.cta':'Shop Now','hero.stat1':'One of a Kind','hero.stat2':'Languages','hero.stat3':'Shipped From',
+    'hero.sub':"Skincare, fragrance, and wellness finds, sourced with care and resold at prices that actually make sense — one drop at a time.",
+    'hero.cta':'Shop Now','hero.stat1':'One of a Kind','hero.stat3':'Shipped From',
     'shop.eyebrow':'The Collection','shop.title':'Shop the Drop','cat.all':'All',
     'about.eyebrow':'Our Story','about.title':'Not just secondhand. Chosen.',
     'about.p':"A.M. Glow Up started the way most good things do — one great find at a time. Every piece is sourced, inspected, and priced by hand before it ever reaches you. No mass drops, no guesswork. Just real pieces, picked with a real eye.",
@@ -441,7 +443,7 @@ var I18N = {
     'footer.tag':'Curated resale, Miami, FL.','footer.rights':'All rights reserved.','footer.built':'Miami, FL',
     'cart.title':'Your Bag','cart.subtotal':'Subtotal','cart.checkout':'Checkout','cart.add':'Add to Bag',
     'cart.empty':'Your bag is empty.','cart.continue':'Continue Shopping',
-    'product.desc':'Gently inspected, true-to-size, and ready to ship. One of one — once it\'s gone, it\'s gone.',
+    'product.desc':'Checked for authenticity and condition before it ships. Once it\'s gone, it\'s gone.',
     'checkout.title':'Almost there','checkout.sub':"Online payments are being finalized — for now, we'll confirm your order by phone or TikTok.",
     'checkout.phone':'Phone Number','checkout.address':'Delivery Address','checkout.payment':'Payment Method',
     'checkout.payLater':'Confirm by phone / TikTok','checkout.payCard':'Card — coming soon','checkout.place':'Place Order',
@@ -452,8 +454,8 @@ var I18N = {
   ht: {
     'nav.shop':'Boutik','nav.about':'Konsènan Nou','nav.contact':'Kontakte Nou',
     'hero.eyebrow':'Baze nan Miami, FL','hero.title':'Chak pyès, chwazi ak men.',
-    'hero.sub':'Bagay dezyèm men, transfòme an yon style ou fyè pou montre — vann ak swen, yon nouvo dwòp alafwa.',
-    'hero.cta':'Achte Kounye a','hero.stat1':'Inik','hero.stat2':'Lang','hero.stat3':'Anvwaye Soti Nan',
+    'hero.sub':'Pwodwi po, pafen, ak byennèt, chwazi ak swen epi vann a bon pri — yon nouvo dwòp alafwa.',
+    'hero.cta':'Achte Kounye a','hero.stat1':'Inik','hero.stat3':'Anvwaye Soti Nan',
     'shop.eyebrow':'Koleksyon An','shop.title':'Achte Nouvo Dwòp La','cat.all':'Tout',
     'about.eyebrow':'Istwa Nou','about.title':'Se pa senpleman dezyèm men. Se chwazi.',
     'about.p':"A.M. Glow Up kòmanse jan pi bon bagay yo toujou kòmanse — yon bon jwenn alafwa. Chak pyès chwazi, verifye, epi pri li mete ak men anvan li rive jwenn ou. Pa gen gwo dwòp an mas, pa gen deviné. Se sèlman bon pyès, chwazi ak yon bon je.",
@@ -466,7 +468,7 @@ var I18N = {
     'footer.tag':'Rezanti chwazi, Miami, FL.','footer.rights':'Tout dwa rezève.','footer.built':'Miami, FL',
     'cart.title':'Sak Ou','cart.subtotal':'Total Pasyèl','cart.checkout':'Peye Kounye a','cart.add':'Mete nan Sak',
     'cart.empty':'Sak ou vid.','cart.continue':'Kontinye Achte',
-    'product.desc':'Verifye ak swen, gwosè kòrèk, epi pare pou anvwaye. Yon sèl grenn — lè li fini, li fini.',
+    'product.desc':'Verifye pou orijinalite ak kondisyon anvan li anvwaye. Lè li fini, li fini.',
     'checkout.title':'Prèske fini','checkout.sub':'Peman anliy ap byento disponib — pou kounye a, n ap konfime kòmand ou pa telefòn oswa TikTok.',
     'checkout.phone':'Nimewo Telefòn','checkout.address':'Adrès Livrezon','checkout.payment':'Metòd Peman',
     'checkout.payLater':'Konfime pa telefòn / TikTok','checkout.payCard':'Kat — byento','checkout.place':'Voye Kòmand',
@@ -503,19 +505,45 @@ function applyLang(lang) {
    background-removed product photos once provided, and
    this whole array is the only thing that needs updating.
 ═══════════════════════════════════════════════ */
+/* Real inventory — photographed by the client, background-removed and
+   placed on white. Prices are placeholder estimates (marked so below);
+   swap them for her real pricing before this goes live for real sales. */
 var PRODUCTS = [
-  { id:1, name:'Cropped Denim Jacket', cat:'Outerwear', price:38, img:null },
-  { id:2, name:'Satin Slip Dress', cat:'Dresses', price:32, img:null },
-  { id:3, name:'Vintage Band Tee', cat:'Tops', price:22, img:null },
-  { id:4, name:'Pleated Midi Skirt', cat:'Bottoms', price:28, img:null },
-  { id:5, name:'Gold Hoop Set', cat:'Accessories', price:16, img:null },
-  { id:6, name:'Leather Ankle Boots', cat:'Shoes', price:45, img:null },
-  { id:7, name:'Oversized Blazer', cat:'Outerwear', price:40, img:null },
-  { id:8, name:'Wrap Bodycon Dress', cat:'Dresses', price:34, img:null },
-  { id:9, name:'Ribbed Tank Top', cat:'Tops', price:14, img:null },
-  { id:10, name:'Wide-Leg Trousers', cat:'Bottoms', price:26, img:null },
-  { id:11, name:'Beaded Clutch Bag', cat:'Accessories', price:20, img:null },
-  { id:12, name:'Platform Sneakers', cat:'Shoes', price:36, img:null }
+  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      cat:'Wellness',    price:22, img:'/assets/products/neocell-collagen-protein.jpg' },
+  { id:2,  name:'Giorgio Armani My Way EDP',                  cat:'Fragrance',   price:35, img:'/assets/products/armani-my-way.jpg' },
+  { id:3,  name:'Valentino Uomo Born in Roma — Green',        cat:'Fragrance',   price:20, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
+  { id:4,  name:'Valentino Donna EDP',                        cat:'Fragrance',   price:30, img:'/assets/products/valentino-donna.jpg' },
+  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        cat:'Fragrance',   price:20, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
+  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       cat:'Skincare',    price:12, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
+  { id:7,  name:'Nourisoy Nutritional Blend',                 cat:'Wellness',    price:4,  img:'/assets/products/nourisoy.jpg' },
+  { id:8,  name:'Vaseline Original Healing Jelly',             cat:'Skincare',    price:6,  img:'/assets/products/vaseline-healing-jelly.jpg' },
+  { id:9,  name:'Byenblan Papaya Face & Body Soap',           cat:'Bath & Body', price:5,  img:'/assets/products/byenblan-papaya-soap.jpg' },
+  { id:10, name:'CT+ Clear Therapy Serum',                    cat:'Skincare',    price:14, img:'/assets/products/ct-plus-clear-therapy-serum.jpg' },
+  { id:11, name:'Ryan Blake No. 44',                          cat:'Fragrance',   price:15, img:'/assets/products/ryan-blake-44.jpg' },
+  { id:12, name:'CaroTone Brightening Oil',                   cat:'Skincare',    price:13, img:'/assets/products/carotone-brightening-oil.jpg' },
+  { id:13, name:'CaroTone Natural Glow Body Cream',           cat:'Skincare',    price:13, img:'/assets/products/carotone-body-cream.jpg' },
+  { id:14, name:'Idolé Savon Bébé Carotte',                   cat:'Bath & Body', price:5,  img:'/assets/products/idole-savon-bebe.jpg' },
+  { id:15, name:'Jabón Germicida Roldán',                     cat:'Bath & Body', price:5,  img:'/assets/products/jabon-germicida-roldan.jpg' },
+  { id:16, name:'CareTone Lightening Body Cream',             cat:'Skincare',    price:12, img:'/assets/products/caretone-lightening-cream.jpg' },
+  { id:17, name:'White Secret Lightening Lotion',             cat:'Skincare',    price:11, img:'/assets/products/white-secret-lotion.jpg' },
+  { id:18, name:'Intense Flair Ultra Lightening Soap',        cat:'Bath & Body', price:6,  img:'/assets/products/intense-flair-soap.jpg' },
+  { id:19, name:'DAX Kocatah Scalp Treatment',                cat:'Hair Care',   price:8,  img:'/assets/products/dax-kocatah.jpg' },
+  { id:20, name:'Perfect White Lightening Soap',              cat:'Bath & Body', price:6,  img:'/assets/products/perfect-white-soap.jpg' },
+  { id:21, name:'Paw Paw Clarifying Cream',                   cat:'Skincare',    price:10, img:'/assets/products/paw-paw-cream.jpg' },
+  { id:22, name:'Paw Paw Clarifying Lotion',                  cat:'Skincare',    price:10, img:'/assets/products/paw-paw-lotion.jpg' },
+  { id:23, name:'Esapharma Lemonvate Cream',                  cat:'Skincare',    price:9,  img:'/assets/products/lemonvate-cream.jpg' },
+  { id:24, name:'3 Days No Taches Carrot Cream',              cat:'Skincare',    price:12, img:'/assets/products/3days-no-taches-carrot-cream.jpg' },
+  { id:25, name:'Godrej Powder Hair Dye',                     cat:'Hair Care',   price:7,  img:'/assets/products/godrej-hair-dye.jpg' },
+  { id:26, name:'CT+ Clear Therapy Soap',                     cat:'Bath & Body', price:7,  img:'/assets/products/ct-plus-soap.jpg' },
+  { id:27, name:'Anti-Taches Night & Day Cream',              cat:'Skincare',    price:13, img:'/assets/products/anti-taches-cream.jpg' },
+  { id:28, name:'Mont St Michel Eau de Cologne',              cat:'Fragrance',   price:18, img:'/assets/products/mont-st-michel-cologne.jpg' },
+  { id:29, name:'Quinaderm Cream',                            cat:'Skincare',    price:9,  img:'/assets/products/quinaderm-cream.jpg' },
+  { id:30, name:'Borasol Antiseptic Powder',                  cat:'Bath & Body', price:8,  img:'/assets/products/borasol-powder.jpg' },
+  { id:31, name:'Hombre Body Spray Deodorant',                cat:'Bath & Body', price:9,  img:'/assets/products/hombre-deodorant.jpg' },
+  { id:32, name:'Seoul Ceuticals Snail Mucin Mask',           cat:'Skincare',    price:16, img:'/assets/products/seoul-ceuticals-mask.jpg' },
+  { id:33, name:'Glister Multi-Action Toothpaste',            cat:'Bath & Body', price:7,  img:'/assets/products/glister-toothpaste.jpg' },
+  { id:34, name:'ActiMed Anti-Dandruff Shampoo',              cat:'Hair Care',   price:9,  img:'/assets/products/actimed-shampoo.jpg' },
+  { id:35, name:'CareTone Beauty Soap & Cream Set',           cat:'Skincare',    price:14, img:'/assets/products/caretone-soap-set.jpg' }
 ];
 var activeCat = 'All';
 var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]');
