@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FF2E86'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-style='italic' font-size='54' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<title>Checkout | A.M. Glow Up</title>
+<meta name="description" content="Checkout securely at A.M. Glow Up — curated skincare, fragrance, and wellness finds, resold with care." />
+<meta name="robots" content="noindex, follow" />
+<meta name="theme-color" content="#FF2E86" />
+<link rel="canonical" href="https://amglowup.com/checkout.html" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --ink:#241318;
+    --ink-soft:#6b5a60;
+    --paper:#ffffff;
+    --paper-soft:#fff6f9;
+    --pink:#ff1478;
+    --pink-deep:#9e0052;
+    --pink-pale:#ffe1ee;
+    --line:#f2dde5;
+    --shadow:0 20px 60px rgba(255,20,120,0.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:auto}
+  body{background:var(--paper);color:var(--ink);font-family:'Montserrat',system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  ::selection{background:var(--pink);color:#fff}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--pink-deep)}
+  h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;line-height:1.05}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;transition:transform .2s ease,box-shadow .2s ease}
+  .btn-pink{background:var(--pink);color:#fff;box-shadow:0 14px 34px rgba(255,20,120,0.38)}
+  .btn-pink:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(255,20,120,0.48)}
+  .btn-pink:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+  /* ── Nav (identical to index.html for consistency) ── */
+  #nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);box-shadow:0 4px 24px rgba(0,0,0,0.04)}
+  .support-bar{background:var(--pink-deep);color:#fff;padding:10px 40px;font-size:13px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1680px;margin:0 auto}
+  .support-bar a{display:inline-flex;align-items:center;gap:7px;color:#fff}
+  .support-bar a:hover{text-decoration:underline}
+  .support-shipping{display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .nav-inner{max-width:1680px;margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+  .logo img{height:64px;width:auto;display:block}
+  .nav-actions{display:flex;align-items:center;gap:22px}
+  .cart-btn{position:relative;width:46px;height:46px;border-radius:50%;background:var(--paper-soft);display:flex;align-items:center;justify-content:center}
+  .cart-count{position:absolute;top:-4px;right:-4px;background:var(--pink);color:#fff;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+  /* ── Checkout hero ── */
+  .checkout-hero{padding:180px 0 52px;text-align:center;background:linear-gradient(180deg,var(--paper-soft),#fff 80%)}
+  .checkout-hero h1{font-size:clamp(36px,5vw,56px);margin-top:10px}
+
+  /* ── Checkout layout ── */
+  .checkout-wrap{padding:0 0 100px}
+  .checkout-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:start}
+  .checkout-section-title{font-size:24px;margin-bottom:22px}
+  .checkout-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:36px}
+  .checkout-panel + .checkout-panel{margin-top:28px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px}
+  .field input{width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:14px;background:#fff;transition:border-color .2s ease}
+  .field input:focus{outline:none;border-color:var(--pink)}
+
+  /* ── Order summary ── */
+  .order-panel{background:var(--paper-soft);border:1px solid var(--line);border-radius:20px;padding:36px;position:sticky;top:120px}
+  .order-items{display:flex;flex-direction:column;gap:16px;margin-bottom:20px}
+  .order-item{display:flex;gap:14px;align-items:center}
+  .order-item .ph{width:56px;height:70px;border-radius:10px;background:linear-gradient(150deg,var(--pink-pale),#fff);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .order-item .ph img{width:100%;height:100%;object-fit:cover}
+  .order-item-info{flex:1;min-width:0}
+  .order-item-info .nm{font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .order-item-info .qp{font-size:12px;color:var(--ink-soft)}
+  .order-item .lp{font-weight:800;color:var(--pink-deep);font-size:14px;white-space:nowrap}
+  .order-totals{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:10px}
+  .order-totals .row{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-soft)}
+  .order-totals .row.total{font-size:18px;font-weight:800;color:var(--ink);padding-top:10px;border-top:1px solid var(--line)}
+
+  /* ── Payment method ── */
+  .pay-option{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:border-color .2s ease,background .2s ease}
+  .pay-option input{accent-color:var(--pink);width:18px;height:18px}
+  .pay-option.active{border-color:var(--pink);background:var(--pink-pale)}
+  .pay-option.disabled{opacity:.5;cursor:not-allowed}
+  .pay-option .pt{font-weight:700;font-size:14px}
+  .pay-option .ps{font-size:12px;color:var(--ink-soft)}
+
+  .checkout-empty{text-align:center;padding:80px 20px;color:var(--ink-soft)}
+  .checkout-empty .btn{margin-top:20px}
+
+  /* ── Confirmation ── */
+  .checkout-confirm{text-align:center;padding:100px 0}
+  .confirm-icon{width:76px;height:76px;border-radius:50%;background:var(--pink-pale);color:var(--pink);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px}
+  .checkout-confirm h1{font-size:clamp(30px,4.5vw,46px);margin-bottom:14px}
+  .checkout-confirm p{color:var(--ink-soft);max-width:46ch;margin:0 auto 30px}
+
+  /* ── Footer (identical to index.html) ── */
+  footer{background:var(--ink);color:#fff;padding:64px 0 30px}
+  .foot-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:30px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,0.12)}
+  .foot-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:30px}
+  .foot-logo span{color:var(--pink)}
+  .foot-social{display:flex;gap:12px}
+  .foot-social a{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background .2s ease}
+  .foot-social a:hover{background:var(--pink)}
+  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;padding-top:22px;font-size:12px;color:rgba(255,255,255,0.5)}
+
+  /* ── Cart drawer (identical to index.html) ── */
+  .overlay{position:fixed;inset:0;background:rgba(36,19,24,0.45);opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:200}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);background:#fff;z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(36,19,24,0.18)}
+  .drawer.open{transform:none}
+  .drawer-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
+  .drawer-head h3{font-size:22px}
+  .drawer-close{width:34px;height:34px;border-radius:50%;background:var(--paper-soft);display:flex;align-items:center;justify-content:center;font-size:16px}
+  .drawer-body{flex:1;overflow-y:auto;padding:20px 24px}
+  .cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .cart-item .ph{width:64px;height:80px;border-radius:10px;background:linear-gradient(150deg,var(--pink-pale),#fff);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--pink-deep);text-align:center;font-weight:700;overflow:hidden}
+  .cart-item .ph img{width:100%;height:100%;object-fit:cover}
+  .cart-item-info{flex:1;display:flex;flex-direction:column;gap:6px}
+  .qty-ctrl{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;width:fit-content}
+  .qty-ctrl button{font-size:15px;font-weight:800;color:var(--pink-deep);width:16px}
+  .cart-empty{text-align:center;padding:60px 20px 20px;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:22px}
+  .cart-empty-icon{width:88px;height:88px;border-radius:50%;background:var(--paper-soft);color:var(--pink);display:flex;align-items:center;justify-content:center}
+  .cart-empty-title{font-size:18px;font-weight:800;color:var(--ink)}
+  .cart-empty .btn{width:100%;justify-content:center}
+  .drawer-foot{padding:22px 24px;border-top:1px solid var(--line)}
+  .subtotal-row{display:flex;justify-content:space-between;font-weight:700;font-size:16px;margin-bottom:16px}
+
+  @media(max-width:900px){
+    .checkout-grid{grid-template-columns:1fr}
+    .order-panel{position:static}
+    .form-row{grid-template-columns:1fr}
+    .support-shipping{display:none}
+    .support-bar{justify-content:center;text-align:center;padding:10px 20px}
+    .nav-inner{padding:14px 20px}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="support-bar">
+    <a href="https://wa.me/17865217657" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.88L4 20l4.24-1.11a7.9 7.9 0 0 0 3.8.97h.01a7.94 7.94 0 0 0 5.55-13.54zM12.05 18.4a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.66.67-2.44-.16-.25a6.59 6.59 0 0 1 10.2-8.2 6.55 6.55 0 0 1 1.94 4.67 6.6 6.6 0 0 1-6.55 6.62zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.78-.11.13-.23.15-.43.05-.2-.1-.83-.31-1.58-.98-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34-.12-.01-.25-.01-.38-.01a.73.73 0 0 0-.53.25c-.18.19-.7.69-.7 1.67 0 .99.72 1.94.82 2.08.1.13 1.4 2.14 3.4 3 .47.2.84.32 1.13.42.48.15.91.13 1.25.08.38-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
+      <span>Customer Support (WhatsApp)</span>&nbsp;· (786) 521-7657
+    </a>
+    <span class="support-shipping">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="14" height="10"/><path d="M15 10h4l3 3v3h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="17.5" cy="19" r="2"/></svg>
+      <span>Free Shipping on Orders Over $99</span>
+    </span>
+  </div>
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="assets/brand/logo.png" alt="A.M. Glow Up" /></a>
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartOpen" aria-label="Open cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l1.5 4M18 2l-1.5 4M3.5 8h17l-1.7 10.2a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8L3.5 8z"/><circle cx="9" cy="21" r="1"/><circle cx="17" cy="21" r="1"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="checkout-hero">
+  <span class="eyebrow">Almost There</span>
+  <h1>Checkout</h1>
+</header>
+
+<div id="checkoutMain">
+  <section class="checkout-wrap">
+    <div class="wrap">
+      <div class="checkout-grid">
+
+        <div>
+          <div class="checkout-panel">
+            <h2 class="checkout-section-title">Shipping Information</h2>
+            <form id="checkoutForm">
+              <div class="form-row">
+                <div class="field"><label>Full Name</label><input type="text" id="cfName" required></div>
+                <div class="field"><label>Phone Number</label><input type="tel" id="cfPhone" required></div>
+              </div>
+              <div class="field"><label>Email</label><input type="email" id="cfEmail" required></div>
+              <div class="field"><label>Street Address</label><input type="text" id="cfAddress" required></div>
+              <div class="form-row">
+                <div class="field"><label>City</label><input type="text" id="cfCity" required></div>
+                <div class="field"><label>State</label><input type="text" id="cfState" required></div>
+              </div>
+              <div class="field"><label>ZIP Code</label><input type="text" id="cfZip" required></div>
+            </form>
+          </div>
+
+          <div class="checkout-panel">
+            <h2 class="checkout-section-title">Payment Method</h2>
+            <label class="pay-option active" id="payPhoneOption">
+              <input type="radio" name="pay" value="phone" checked>
+              <div><div class="pt">Confirm by Phone / WhatsApp</div><div class="ps">We'll text or call you to finalize payment — no card details needed here.</div></div>
+            </label>
+            <label class="pay-option disabled">
+              <input type="radio" name="pay" value="card" disabled>
+              <div><div class="pt">Credit / Debit Card</div><div class="ps">Online card payments are coming soon.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="order-panel">
+          <h2 class="checkout-section-title">Your Order</h2>
+          <div class="order-items" id="orderItems"></div>
+          <div class="order-totals">
+            <div class="row"><span>Subtotal</span><span id="orderSubtotal">$0</span></div>
+            <div class="row"><span>Shipping</span><span id="orderShipping">$0</span></div>
+            <div class="row total"><span>Total</span><span id="orderTotal">$0</span></div>
+          </div>
+          <button type="submit" form="checkoutForm" class="btn btn-pink" id="placeOrderBtn" style="width:100%;justify-content:center;margin-top:22px">Place Order</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="checkout-confirm" id="checkoutConfirm" style="display:none">
+  <div class="wrap">
+    <div class="confirm-icon">&#10003;</div>
+    <span class="eyebrow">Order Confirmed</span>
+    <h1>Thank You.</h1>
+    <p>Thank you for shopping with A.M. Glow Up. Your order has been placed — we'll reach out by phone or WhatsApp shortly to confirm and arrange payment.</p>
+    <a href="index.html#shop" class="btn btn-pink">Continue Shopping</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-logo">A.M. <span>Glow Up</span></div>
+        <p style="color:rgba(255,255,255,0.55);font-size:13px;margin-top:8px">Curated resale, Miami, FL.</p>
+      </div>
+      <div class="foot-social">
+        <a href="tel:+17865217657" aria-label="Call"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+        <a href="https://www.tiktok.com/@anthonyesuffrin3" target="_blank" rel="noopener" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.28 0 .55.04.79.13V9.66a5.9 5.9 0 0 0-.79-.05A5.94 5.94 0 0 0 4 15.55a5.94 5.94 0 0 0 5.94 5.94A5.94 5.94 0 0 0 15.87 15.55V9.5a7.35 7.35 0 0 0 4.19 1.31V7.72a4.28 4.28 0 0 1-3.46-1.9z"/></svg></a>
+        <a href="https://www.facebook.com/share/1HNDDVUQiF/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg></a>
+        <a href="https://www.instagram.com/gigitsea/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year"></span> A.M. Glow Up. All rights reserved.</span>
+      <span>Miami, FL</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Cart drawer ── -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button class="drawer-close" id="cartClose">&times;</button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot" style="display:none">
+    <div class="subtotal-row"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
+    <a href="checkout.html" class="btn btn-pink" style="width:100%;justify-content:center">Checkout</a>
+  </div>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Same 57-item catalog as index.html -- kept in sync manually since this
+   is a single-file-per-page build, same convention as the rest of the
+   site. If products change, update both files. */
+var PRODUCTS = [
+  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      price:22, img:'/assets/products/neocell-collagen-protein.jpg' },
+  { id:2,  name:'Giorgio Armani My Way EDP',                  price:35, img:'/assets/products/armani-my-way.jpg' },
+  { id:3,  name:'Valentino Uomo Born in Roma — Green',        price:20, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
+  { id:4,  name:'Valentino Donna EDP',                        price:30, img:'/assets/products/valentino-donna.jpg' },
+  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        price:20, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
+  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       price:12, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
+  { id:7,  name:'Nourisoy Nutritional Blend',                 price:4,  img:'/assets/products/nourisoy.jpg' },
+  { id:8,  name:'Vaseline Original Healing Jelly',             price:6,  img:'/assets/products/vaseline-healing-jelly.jpg' },
+  { id:9,  name:'Byenblan Papaya Face & Body Soap',           price:5,  img:'/assets/products/byenblan-papaya-soap.jpg' },
+  { id:10, name:'CT+ Clear Therapy Serum',                    price:14, img:'/assets/products/ct-plus-clear-therapy-serum.jpg' },
+  { id:11, name:'Ryan Blake No. 44',                          price:15, img:'/assets/products/ryan-blake-44.jpg' },
+  { id:12, name:'CaroTone Brightening Oil',                   price:13, img:'/assets/products/carotone-brightening-oil.jpg' },
+  { id:13, name:'CaroTone Natural Glow Body Cream',           price:13, img:'/assets/products/carotone-body-cream.jpg' },
+  { id:14, name:'Idolé Savon Bébé Carotte',                   price:5,  img:'/assets/products/idole-savon-bebe.jpg' },
+  { id:15, name:'Jabón Germicida Roldán',                     price:5,  img:'/assets/products/jabon-germicida-roldan.jpg' },
+  { id:16, name:'CareTone Lightening Body Cream',             price:12, img:'/assets/products/caretone-lightening-cream.jpg' },
+  { id:17, name:'White Secret Lightening Lotion',             price:11, img:'/assets/products/white-secret-lotion.jpg' },
+  { id:18, name:'Intense Flair Ultra Lightening Soap',        price:6,  img:'/assets/products/intense-flair-soap.jpg' },
+  { id:19, name:'DAX Kocatah Scalp Treatment',                price:8,  img:'/assets/products/dax-kocatah.jpg' },
+  { id:20, name:'Perfect White Lightening Soap',              price:6,  img:'/assets/products/perfect-white-soap.jpg' },
+  { id:21, name:'Paw Paw Clarifying Cream',                   price:10, img:'/assets/products/paw-paw-cream.jpg' },
+  { id:22, name:'Paw Paw Clarifying Lotion',                  price:10, img:'/assets/products/paw-paw-lotion.jpg' },
+  { id:23, name:'Esapharma Lemonvate Cream',                  price:9,  img:'/assets/products/lemonvate-cream.jpg' },
+  { id:24, name:'3 Days No Taches Carrot Cream',              price:12, img:'/assets/products/3days-no-taches-carrot-cream.jpg' },
+  { id:25, name:'Godrej Powder Hair Dye',                     price:7,  img:'/assets/products/godrej-hair-dye.jpg' },
+  { id:26, name:'CT+ Clear Therapy Soap',                     price:7,  img:'/assets/products/ct-plus-soap.jpg' },
+  { id:27, name:'Anti-Taches Night & Day Cream',              price:13, img:'/assets/products/anti-taches-cream.jpg' },
+  { id:28, name:'Mont St Michel Eau de Cologne',              price:18, img:'/assets/products/mont-st-michel-cologne.jpg' },
+  { id:29, name:'Quinaderm Cream',                            price:9,  img:'/assets/products/quinaderm-cream.jpg' },
+  { id:30, name:'Borasol Antiseptic Powder',                  price:8,  img:'/assets/products/borasol-powder.jpg' },
+  { id:31, name:'Hombre Body Spray Deodorant',                price:9,  img:'/assets/products/hombre-deodorant.jpg' },
+  { id:32, name:'Seoul Ceuticals Snail Mucin Mask',           price:16, img:'/assets/products/seoul-ceuticals-mask.jpg' },
+  { id:33, name:'Glister Multi-Action Toothpaste',            price:7,  img:'/assets/products/glister-toothpaste.jpg' },
+  { id:34, name:'ActiMed Anti-Dandruff Shampoo',              price:9,  img:'/assets/products/actimed-shampoo.jpg' },
+  { id:35, name:'CareTone Beauty Soap & Cream Set',           price:14, img:'/assets/products/caretone-soap-set.jpg' },
+  { id:36, name:'AMG Gout & Uric Acid Balance Tea',           price:8,  img:'/assets/products/amg-gout-uric-acid-tea.jpg' },
+  { id:37, name:'AMG Energy Herbal Tea',                      price:8,  img:'/assets/products/amg-energy-tea.jpg' },
+  { id:38, name:'Yoni Detox Pearls',                          price:10, img:'/assets/products/yoni-detox-pearls.jpg' },
+  { id:39, name:'Supreme 3 Days Lightening Cream',            price:10, img:'/assets/products/supreme-3days-no-taches.jpg' },
+  { id:40, name:'DermaPro Intensive Lightening Body Cream',   price:11, img:'/assets/products/dermapro-lightening-cream.jpg' },
+  { id:41, name:'PerfectWhite Lightening Beauty Lotion',      price:11, img:'/assets/products/perfectwhite-lightening-lotion.jpg' },
+  { id:42, name:'Lilies Fleur de Lys Lightening Body Lotion', price:12, img:'/assets/products/lilies-lightening-lotion.jpg' },
+  { id:43, name:'Caro White Lightening Beauty Cream',         price:13, img:'/assets/products/caro-white-cream.jpg' },
+  { id:44, name:'Maxi Light Lightening & Purifying Cream',    price:12, img:'/assets/products/maxi-light-cream.jpg' },
+  { id:45, name:'Bio Claire Lightening Body Lotion',          price:12, img:'/assets/products/bioclaire-lotion.jpg' },
+  { id:46, name:'Bio Claire Clarifying Body Cream',           price:12, img:'/assets/products/bioclaire-cream-jar.jpg' },
+  { id:47, name:'CT+ ClearTherapy Extra Lightening Lotion',   price:13, img:'/assets/products/ctplus-cleartherapy-lotion.jpg' },
+  { id:48, name:'Chanel Miniature Perfume Gift Set',          price:45, img:'/assets/products/chanel-mini-set.jpg' },
+  { id:49, name:'Valentino Born in Roma Trio Gift Set',       price:40, img:'/assets/products/valentino-born-in-roma-trio.jpg' },
+  { id:50, name:'Valentino Donna Born in Roma EDP',           price:32, img:'/assets/products/valentino-donna-born-in-roma.jpg' },
+  { id:51, name:'YSL Libre Eau de Parfum',                    price:38, img:'/assets/products/ysl-libre.jpg' },
+  { id:52, name:'YSL Mon Paris Eau de Parfum',                price:36, img:'/assets/products/ysl-mon-paris.jpg' },
+  { id:53, name:'Giorgio Armani Si Passione EDP',             price:34, img:'/assets/products/armani-si-passione.jpg' },
+  { id:54, name:'Hermes Terre d\'Hermes EDT',                 price:30, img:'/assets/products/hermes-terre-dhermes.jpg' },
+  { id:55, name:'Giorgio Armani Prive Heart Gift Set',        price:48, img:'/assets/products/armani-prive-heart-set.jpg' },
+  { id:56, name:'CaroTone Gift Set',                          price:18, img:'/assets/products/carotone-gift-set.jpg' },
+  { id:57, name:'AMG Feminine Care Set',                      price:22, img:'/assets/products/amg-feminine-set-group.jpg' }
+];
+
+var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]');
+
+function changeQty(id, delta) {
+  var line = cart.find(function(l){return l.id===id});
+  if (!line) return;
+  line.qty += delta;
+  if (line.qty <= 0) cart = cart.filter(function(l){return l.id!==id});
+  localStorage.setItem('amg_cart', JSON.stringify(cart));
+  renderAll();
+}
+
+function renderAll() {
+  var count = cart.reduce(function(s,l){return s+l.qty},0);
+  document.getElementById('cartCount').textContent = count;
+
+  /* Drawer */
+  var body = document.getElementById('cartBody');
+  if (cart.length === 0) {
+    body.innerHTML = '<div class="cart-empty">'
+      + '<div class="cart-empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2l1.5 4M18 2l-1.5 4M3.5 8h17l-1.7 10.2a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8L3.5 8z"/><circle cx="9" cy="21" r="1"/><circle cx="17" cy="21" r="1"/></svg></div>'
+      + '<div class="cart-empty-title">Your bag is empty</div>'
+      + '<a href="index.html#shop" class="btn btn-pink">Continue Shopping</a></div>';
+    document.getElementById('cartFoot').style.display = 'none';
+  } else {
+    var subtotal = 0;
+    body.innerHTML = cart.map(function(l) {
+      var p = PRODUCTS.find(function(x){return x.id===l.id});
+      if (!p) return '';
+      subtotal += p.price * l.qty;
+      return '<div class="cart-item">'
+        + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'No Photo')+'</div>'
+        + '<div class="cart-item-info"><div style="font-weight:700;font-size:14px">'+p.name+'</div>'
+        + '<div style="color:var(--ink-soft);font-size:13px">$'+p.price+'</div>'
+        + '<div class="qty-ctrl"><button onclick="changeQty('+p.id+',-1)">&minus;</button><span>'+l.qty+'</span><button onclick="changeQty('+p.id+',1)">&plus;</button></div>'
+        + '</div></div>';
+    }).join('');
+    document.getElementById('cartSubtotal').textContent = '$'+subtotal;
+    document.getElementById('cartFoot').style.display = 'block';
+  }
+
+  /* Order summary panel */
+  var orderItems = document.getElementById('orderItems');
+  var placeBtn = document.getElementById('placeOrderBtn');
+  if (cart.length === 0) {
+    document.getElementById('checkoutMain').innerHTML = '<div class="checkout-empty wrap">'
+      + '<h2>Your bag is empty</h2>'
+      + '<p style="color:var(--ink-soft)">Add something from the shop before checking out.</p>'
+      + '<a href="index.html#shop" class="btn btn-pink">Back to Shop</a></div>';
+    return;
+  }
+  var subtotal2 = 0;
+  orderItems.innerHTML = cart.map(function(l) {
+    var p = PRODUCTS.find(function(x){return x.id===l.id});
+    if (!p) return '';
+    var lineTotal = p.price * l.qty;
+    subtotal2 += lineTotal;
+    return '<div class="order-item">'
+      + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'')+'</div>'
+      + '<div class="order-item-info"><div class="nm">'+p.name+'</div><div class="qp">Qty '+l.qty+' &times; $'+p.price+'</div></div>'
+      + '<div class="lp">$'+lineTotal+'</div>'
+      + '</div>';
+  }).join('');
+  var shipping = subtotal2 >= 99 ? 0 : 8;
+  document.getElementById('orderSubtotal').textContent = '$'+subtotal2;
+  document.getElementById('orderShipping').textContent = shipping === 0 ? 'Free' : '$'+shipping;
+  document.getElementById('orderTotal').textContent = '$'+(subtotal2 + shipping);
+}
+renderAll();
+
+/* Drawer + payment option toggle */
+function openCart() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('cartOpen').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('overlay').addEventListener('click', closeCart);
+
+document.querySelectorAll('.pay-option:not(.disabled)').forEach(function(opt) {
+  opt.addEventListener('click', function() {
+    document.querySelectorAll('.pay-option').forEach(function(o){o.classList.remove('active')});
+    opt.classList.add('active');
+  });
+});
+
+/* Submit -- no live payment processor wired up yet (same stub status as
+   the contact form), so this confirms client-side and clears the cart,
+   matching the behavior the old checkout modal already had.
+   Guarded with a null-check: an empty cart replaces #checkoutMain's
+   innerHTML (including this form) with an empty-state message, so this
+   element genuinely doesn't exist on that render pass. */
+var checkoutFormEl = document.getElementById('checkoutForm');
+if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
+  e.preventDefault();
+  cart = [];
+  localStorage.setItem('amg_cart', '[]');
+  document.getElementById('cartCount').textContent = '0';
+  document.getElementById('checkoutMain').style.display = 'none';
+  document.getElementById('checkoutConfirm').style.display = 'block';
+  window.scrollTo(0,0);
+});
+</script>
+
+</body>
+</html>

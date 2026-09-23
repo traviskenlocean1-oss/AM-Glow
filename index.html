@@ -223,7 +223,8 @@
   .drawer-close{width:34px;height:34px;border-radius:50%;background:var(--paper-soft);display:flex;align-items:center;justify-content:center;font-size:16px}
   .drawer-body{flex:1;overflow-y:auto;padding:20px 24px}
   .cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
-  .cart-item .ph{width:64px;height:80px;border-radius:10px;background:linear-gradient(150deg,var(--pink-pale),#fff);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--pink-deep);text-align:center;font-weight:700}
+  .cart-item .ph{width:64px;height:80px;border-radius:10px;background:linear-gradient(150deg,var(--pink-pale),#fff);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--pink-deep);text-align:center;font-weight:700;overflow:hidden}
+  .cart-item .ph img{width:100%;height:100%;object-fit:cover}
   .cart-item-info{flex:1;display:flex;flex-direction:column;gap:6px}
   .qty-ctrl{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;width:fit-content}
   .qty-ctrl button{font-size:15px;font-weight:800;color:var(--pink-deep);width:16px}
@@ -414,7 +415,7 @@
   <div class="drawer-body" id="cartBody"></div>
   <div class="drawer-foot" id="cartFoot" style="display:none">
     <div class="subtotal-row"><span data-i18n="cart.subtotal">Subtotal</span><span id="cartSubtotal">$0</span></div>
-    <button class="btn btn-pink" style="width:100%;justify-content:center" id="checkoutBtn" data-i18n="cart.checkout">Checkout</button>
+    <a href="checkout.html" class="btn btn-pink" style="width:100%;justify-content:center" data-i18n="cart.checkout">Checkout</a>
   </div>
 </div>
 
@@ -431,35 +432,6 @@
         <p data-i18n="product.desc">Checked for authenticity and condition before it ships. Once it's gone, it's gone.</p>
         <button class="btn btn-pink" id="pmAdd" style="width:100%;justify-content:center" data-i18n="cart.add">Add to Bag</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── Checkout modal ── -->
-<div class="modal" id="checkoutModal">
-  <div class="modal-card" style="max-width:520px">
-    <button class="modal-close" id="checkoutModalClose">&times;</button>
-    <div id="checkoutFormWrap" style="padding:40px">
-      <h3 style="font-size:28px;margin-bottom:6px" data-i18n="checkout.title">Almost there</h3>
-      <p style="color:var(--ink-soft);font-size:13px;margin-bottom:24px" data-i18n="checkout.sub">Online payments are being finalized — for now, we'll confirm your order by phone or TikTok.</p>
-      <form id="checkoutForm">
-        <div class="field"><label data-i18n="contact.name">Full Name</label><input type="text" required></div>
-        <div class="field"><label data-i18n="checkout.phone">Phone Number</label><input type="tel" required></div>
-        <div class="field"><label data-i18n="checkout.address">Delivery Address</label><input type="text" required></div>
-        <div class="field">
-          <label data-i18n="checkout.payment">Payment Method</label>
-          <select style="width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:14px;background:#fff">
-            <option data-i18n="checkout.payLater">Confirm by phone / TikTok</option>
-            <option data-i18n="checkout.payCard" disabled>Card — coming soon</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-pink" style="width:100%;justify-content:center;margin-top:6px" data-i18n="checkout.place">Place Order</button>
-      </form>
-    </div>
-    <div class="success-box" id="checkoutSuccess" style="display:none">
-      <div class="success-icon">&#10003;</div>
-      <h3 style="font-size:26px;margin-bottom:10px" data-i18n="checkout.successTitle">Order Request Sent</h3>
-      <p style="color:var(--ink-soft);font-size:14px;max-width:340px;margin:0 auto" data-i18n="checkout.successBody">We've got your order — we'll reach out by phone or TikTok shortly to confirm and arrange payment.</p>
     </div>
   </div>
 </div>
@@ -723,7 +695,7 @@ function renderCart() {
     if (!p) return '';
     subtotal += p.price * l.qty;
     return '<div class="cart-item">'
-      + '<div class="ph">'+(p.img?'':'No Photo')+'</div>'
+      + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'No Photo')+'</div>'
       + '<div class="cart-item-info"><div style="font-weight:700;font-size:14px">'+p.name+'</div>'
       + '<div style="color:var(--ink-soft);font-size:13px">$'+p.price+'</div>'
       + '<div class="qty-ctrl"><button onclick="changeQty('+p.id+',-1)">&minus;</button><span>'+l.qty+'</span><button onclick="changeQty('+p.id+',1)">&plus;</button></div>'
@@ -741,28 +713,12 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 
 document.getElementById('cartOpen').addEventListener('click', openCart);
 document.getElementById('cartClose').addEventListener('click', closeCart);
-document.getElementById('overlay').addEventListener('click', function() { closeCart(); closeModal('productModal'); closeModal('checkoutModal'); });
+document.getElementById('overlay').addEventListener('click', function() { closeCart(); closeModal('productModal'); });
 document.getElementById('productModalClose').addEventListener('click', function(){ closeModal('productModal'); });
-document.getElementById('checkoutModalClose').addEventListener('click', function(){ closeModal('checkoutModal'); resetCheckout(); });
 
-document.getElementById('checkoutBtn').addEventListener('click', function() {
-  if (cart.length === 0) return;
-  closeCart(); openModal('checkoutModal');
-});
-
-/* ── Checkout — front-end only, no real payment processing wired up yet ── */
-function resetCheckout() {
-  document.getElementById('checkoutForm').style.display = 'block';
-  document.getElementById('checkoutSuccess').style.display = 'none';
-  document.getElementById('checkoutForm').reset();
-}
-document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  /* TODO: wire to real payment processor + order notification once decided. */
-  document.getElementById('checkoutForm').style.display = 'none';
-  document.getElementById('checkoutSuccess').style.display = 'block';
-  cart = []; saveCart(); renderCart();
-});
+/* Checkout is now a full page (checkout.html), not a modal -- the drawer's
+   Checkout button is a plain link there, cart state carries over via the
+   same 'amg_cart' localStorage key. */
 
 /* ── Contact form — Formspree not connected yet ── */
 document.getElementById('contactForm').addEventListener('submit', function(e) {
