@@ -92,6 +92,8 @@
   .pay-option .ps{font-size:12px;color:var(--ink-soft)}
   .card-fields{border:1.5px solid var(--line);border-top:none;border-radius:0 0 14px 14px;margin:-12px 0 12px;padding:20px 18px 4px}
   .card-fields .form-row{grid-template-columns:1fr 1fr}
+  .pay-secure-note{display:flex;align-items:center;gap:9px;margin:-4px 0 12px;padding:12px 14px;background:var(--paper-soft);border-radius:10px;font-size:12px;color:var(--ink-soft);line-height:1.5}
+  .pay-secure-note svg{flex-shrink:0;color:var(--pink-deep)}
 
   /* ── Page transition overlay ── */
   .page-transition{position:fixed;inset:0;background:var(--pink);z-index:9999;opacity:0;transform:scale(.85);pointer-events:none;display:none}
@@ -223,6 +225,10 @@
                 <div class="field"><label>Expiry Date</label><input type="text" id="cfCardExpiry" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
                 <div class="field"><label>CVC</label><input type="text" id="cfCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"></div>
               </div>
+            </div>
+            <div class="pay-secure-note" id="paySecureNote" style="display:none">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              <span>Your payment information is encrypted and secure. We never see or store your full card details.</span>
             </div>
           </div>
         </div>
@@ -441,6 +447,7 @@ if (cardNumberEl) {
       opt.classList.add('active');
       var isCard = opt.id === 'payCardOption';
       document.getElementById('cardFields').style.display = isCard ? 'block' : 'none';
+      document.getElementById('paySecureNote').style.display = isCard ? 'flex' : 'none';
       cardFieldEls.forEach(function(el){ el.required = isCard; });
     });
   });
