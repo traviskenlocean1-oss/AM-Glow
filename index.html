@@ -250,6 +250,9 @@
   .success-box{text-align:center;padding:50px 30px}
   .success-icon{width:64px;height:64px;border-radius:50%;background:var(--pink-pale);color:var(--pink);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
 
+  /* ── Page transition overlay ── */
+  .page-transition{position:fixed;inset:0;background:var(--pink);z-index:9999;opacity:0;transform:scale(.85);pointer-events:none;display:none}
+
   @media(max-width:900px){
     .nav-links,.nav-actions .lang-toggle{display:none}
     .burger{display:block}
@@ -268,6 +271,13 @@
 </style>
 </head>
 <body>
+
+<div class="page-transition" id="pageTransition"></div>
+<script>
+  if (sessionStorage.getItem('amg_transitioning') === '1') {
+    document.getElementById('pageTransition').style.cssText = 'display:block;opacity:1;transform:scale(1)';
+  }
+</script>
 
 <nav id="nav">
   <div class="support-bar">
@@ -759,6 +769,46 @@ document.addEventListener('click', function(e) {
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ── Page transition (big scale + fade, matches the site-wide standard) ── */
+function pageTransitionOut(href) {
+  sessionStorage.setItem('amg_transitioning', '1');
+  var ov = document.getElementById('pageTransition');
+  gsap.killTweensOf(ov);
+  gsap.set(ov, { display: 'block' });
+  gsap.fromTo(ov, { opacity: 0, scale: 0.85 }, {
+    opacity: 1, scale: 1, duration: 0.6, ease: 'power3.inOut',
+    onComplete: function() { window.location.href = href; }
+  });
+}
+function pageTransitionIn() {
+  var ov = document.getElementById('pageTransition');
+  if (!ov || sessionStorage.getItem('amg_transitioning') !== '1') return;
+  sessionStorage.removeItem('amg_transitioning');
+  gsap.set(ov, { display: 'block', opacity: 1, scale: 1 });
+  gsap.to(ov, { opacity: 0, scale: 1.15, duration: 0.7, ease: 'power3.inOut', delay: 0.05,
+    onComplete: function() { gsap.set(ov, { display: 'none' }); }
+  });
+}
+pageTransitionIn();
+
+/* Any link over to checkout.html plays the transition instead of a plain
+   jump -- same overlay as checkout.html uses coming back, so it reads as
+   one consistent motion in both directions. */
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href="checkout.html"]');
+  if (!a) return;
+  e.preventDefault();
+  pageTransitionOut('checkout.html');
+});
+
+/* Clicking the logo while already on the home page has nowhere to
+   "transition" to -- it just needs to feel like coming home, so it gets a
+   smooth animated scroll back to the hero instead of the full-page effect. */
+document.querySelector('.logo').addEventListener('click', function(e) {
+  e.preventDefault();
+  lenis.scrollTo(0, { duration: 1.2, easing: function(t){ return 1 - Math.pow(1 - t, 3); } });
+});
 
 /* Set initial language/content BEFORE the hero text gets split into
    per-letter spans below — applyLang() also handles data-i18n-split by

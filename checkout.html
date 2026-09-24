@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
 <style>
   :root{
@@ -87,9 +88,13 @@
   .pay-option{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:border-color .2s ease,background .2s ease}
   .pay-option input{accent-color:var(--pink);width:18px;height:18px}
   .pay-option.active{border-color:var(--pink);background:var(--pink-pale)}
-  .pay-option.disabled{opacity:.5;cursor:not-allowed}
   .pay-option .pt{font-weight:700;font-size:14px}
   .pay-option .ps{font-size:12px;color:var(--ink-soft)}
+  .card-fields{border:1.5px solid var(--line);border-top:none;border-radius:0 0 14px 14px;margin:-12px 0 12px;padding:20px 18px 4px}
+  .card-fields .form-row{grid-template-columns:1fr 1fr}
+
+  /* ── Page transition overlay ── */
+  .page-transition{position:fixed;inset:0;background:var(--pink);z-index:9999;opacity:0;transform:scale(.85);pointer-events:none;display:none}
 
   .checkout-empty{text-align:center;padding:80px 20px;color:var(--ink-soft)}
   .checkout-empty .btn{margin-top:20px}
@@ -143,6 +148,13 @@
 </style>
 </head>
 <body>
+
+<div class="page-transition" id="pageTransition"></div>
+<script>
+  if (sessionStorage.getItem('amg_transitioning') === '1') {
+    document.getElementById('pageTransition').style.cssText = 'display:block;opacity:1;transform:scale(1)';
+  }
+</script>
 
 <nav id="nav">
   <div class="support-bar">
@@ -200,10 +212,18 @@
               <input type="radio" name="pay" value="phone" checked>
               <div><div class="pt">Confirm by Phone / WhatsApp</div><div class="ps">We'll text or call you to finalize payment — no card details needed here.</div></div>
             </label>
-            <label class="pay-option disabled">
-              <input type="radio" name="pay" value="card" disabled>
-              <div><div class="pt">Credit / Debit Card</div><div class="ps">Online card payments are coming soon.</div></div>
+            <label class="pay-option" id="payCardOption">
+              <input type="radio" name="pay" value="card">
+              <div><div class="pt">Credit / Debit Card</div><div class="ps">Pay securely with your card.</div></div>
             </label>
+            <div class="card-fields" id="cardFields" style="display:none">
+              <div class="field"><label>Card Number</label><input type="text" id="cfCardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"></div>
+              <div class="field"><label>Name on Card</label><input type="text" id="cfCardName" autocomplete="cc-name" placeholder="Full name as shown on card"></div>
+              <div class="form-row">
+                <div class="field"><label>Expiry Date</label><input type="text" id="cfCardExpiry" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
+                <div class="field"><label>CVC</label><input type="text" id="cfCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -410,11 +430,67 @@ document.getElementById('cartOpen').addEventListener('click', openCart);
 document.getElementById('cartClose').addEventListener('click', closeCart);
 document.getElementById('overlay').addEventListener('click', closeCart);
 
-document.querySelectorAll('.pay-option:not(.disabled)').forEach(function(opt) {
-  opt.addEventListener('click', function() {
-    document.querySelectorAll('.pay-option').forEach(function(o){o.classList.remove('active')});
-    opt.classList.add('active');
+/* Guarded like checkoutFormEl above -- none of this exists when the empty-cart
+   state has already replaced #checkoutMain's innerHTML. */
+var cardNumberEl = document.getElementById('cfCardNumber');
+if (cardNumberEl) {
+  var cardFieldEls = [cardNumberEl, document.getElementById('cfCardName'), document.getElementById('cfCardExpiry'), document.getElementById('cfCardCvc')];
+  document.querySelectorAll('.pay-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.pay-option').forEach(function(o){o.classList.remove('active')});
+      opt.classList.add('active');
+      var isCard = opt.id === 'payCardOption';
+      document.getElementById('cardFields').style.display = isCard ? 'block' : 'none';
+      cardFieldEls.forEach(function(el){ el.required = isCard; });
+    });
   });
+
+  /* Light input formatting for the card fields -- cosmetic only, no real
+     payment processor wired up yet (Travis will connect one later, same
+     stub-then-wire pattern as the Psychotic Love checkout). */
+  cardNumberEl.addEventListener('input', function(e) {
+    var digits = e.target.value.replace(/\D/g,'').slice(0,16);
+    e.target.value = digits.replace(/(.{4})/g,'$1 ').trim();
+  });
+  document.getElementById('cfCardExpiry').addEventListener('input', function(e) {
+    var digits = e.target.value.replace(/\D/g,'').slice(0,4);
+    e.target.value = digits.length > 2 ? digits.slice(0,2) + ' / ' + digits.slice(2) : digits;
+  });
+  document.getElementById('cfCardCvc').addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+  });
+}
+
+/* ── Page transition (big scale + fade, matches the site-wide standard) ── */
+function pageTransitionOut(href) {
+  sessionStorage.setItem('amg_transitioning', '1');
+  var ov = document.getElementById('pageTransition');
+  gsap.killTweensOf(ov);
+  gsap.set(ov, { display: 'block' });
+  gsap.fromTo(ov, { opacity: 0, scale: 0.85 }, {
+    opacity: 1, scale: 1, duration: 0.6, ease: 'power3.inOut',
+    onComplete: function() { window.location.href = href; }
+  });
+}
+function pageTransitionIn() {
+  var ov = document.getElementById('pageTransition');
+  if (!ov || sessionStorage.getItem('amg_transitioning') !== '1') return;
+  sessionStorage.removeItem('amg_transitioning');
+  gsap.set(ov, { display: 'block', opacity: 1, scale: 1 });
+  gsap.to(ov, { opacity: 0, scale: 1.15, duration: 0.7, ease: 'power3.inOut', delay: 0.05,
+    onComplete: function() { gsap.set(ov, { display: 'none' }); }
+  });
+}
+pageTransitionIn();
+
+/* Any link back to index.html (logo, "Continue Shopping" in the empty-cart
+   states, the post-order confirmation link) plays the transition instead
+   of a plain jump -- consistent across the whole site, not just the logo. */
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href^="index.html"]');
+  if (!a || a.target === '_blank') return;
+  e.preventDefault();
+  pageTransitionOut(a.getAttribute('href'));
 });
 
 /* Submit -- no live payment processor wired up yet (same stub status as
