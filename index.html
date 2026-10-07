@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FF2E86'/%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-style='italic' font-size='54' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" /><link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- ═══════════════════════════════════════════════════════════
      SEO — Primary Meta
 ═══════════════════════════════════════════════════════════ -->
-<title>A.M. Glow Up | Curated Resale Boutique in Miami, FL</title>
-<meta name="description" content="Hand-picked beauty, skincare, and wellness finds, resold with care. A.M. Glow Up is a Miami-based resale boutique — shop skincare, fragrance, hair care and more, curated one piece at a time." />
-<meta name="keywords" content="beauty resale Miami, skincare resale, fragrance resale, wellness resale, curated beauty finds, A.M. Glow Up" />
+<title>A.M. Glow Up | Skincare, Fragrance &amp; Wellness — Miami, FL</title>
+<meta name="description" content="Shop skincare, designer fragrance, hair care and wellness products from A.M. Glow Up in Miami, FL — CaroTone, Valentino, Armani, YSL, Chanel and more. Secure card checkout, free shipping on orders over $99." />
 <meta name="author" content="A.M. Glow Up" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 <meta name="theme-color" content="#FF2E86" />
@@ -23,11 +22,16 @@
 <meta property="og:site_name" content="A.M. Glow Up" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content="https://amglowup.com/" />
-<meta property="og:title" content="A.M. Glow Up | Curated Resale Boutique in Miami, FL" />
-<meta property="og:description" content="Hand-picked beauty and wellness finds, resold with care. Shop the current drop." />
+<meta property="og:title" content="A.M. Glow Up | Skincare, Fragrance &amp; Wellness — Miami, FL" />
+<meta property="og:description" content="Skincare, designer fragrance and wellness finds from Miami. Free shipping on orders over $99." />
+<meta property="og:image" content="https://amglowup.com/assets/brand/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="A.M. Glow Up skincare and fragrance products" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="A.M. Glow Up | Curated Resale Boutique" />
-<meta name="twitter:description" content="Hand-picked beauty and wellness finds, resold with care." />
+<meta name="twitter:title" content="A.M. Glow Up | Skincare, Fragrance &amp; Wellness" />
+<meta name="twitter:description" content="Skincare, designer fragrance and wellness finds from Miami. Free shipping on orders over $99." />
+<meta name="twitter:image" content="https://amglowup.com/assets/brand/og-image.jpg" />
 
 <!-- ═══════════════════════════════════════════════════════════
      JSON-LD — Organization + WebSite (no LocalBusiness/address claim —
@@ -42,6 +46,9 @@
       "@id": "https://amglowup.com/#org",
       "name": "A.M. Glow Up",
       "url": "https://amglowup.com",
+      "logo": "https://amglowup.com/assets/brand/logo.png",
+      "image": "https://amglowup.com/assets/brand/og-image.jpg",
+      "description": "Miami-based seller of skincare, designer fragrance, hair care and wellness products.",
       "telephone": "+17865217657",
       "areaServed": { "@type": "City", "name": "Miami" },
       "sameAs": ["https://www.tiktok.com/@anthonyesuffrin3", "https://www.facebook.com/share/1HNDDVUQiF/?mibextid=wwXIfr", "https://www.instagram.com/gigitsea/"]
@@ -52,7 +59,7 @@
       "url": "https://amglowup.com",
       "name": "A.M. Glow Up",
       "publisher": { "@id": "https://amglowup.com/#org" },
-      "inLanguage": ["en-US", "ht"]
+      "inLanguage": ["en-US", "es", "ht"]
     }
   ]
 }
@@ -621,6 +628,42 @@ function isSoldOut(id) { var p = PRODUCTS.find(function(x){return x.id===id}); r
 /* Drop anything that has since sold out from a saved bag. */
 var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]').filter(function(l){ return !isSoldOut(l.id); });
 localStorage.setItem('amg_cart', JSON.stringify(cart));
+
+/* Product structured data for Google (prices + stock), built from the same
+   PRODUCTS list the shop renders so it can never drift out of sync. */
+(function addProductSchema() {
+  var origin = 'https://amglowup.com';
+  var ld = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': 'A.M. Glow Up Shop',
+    'itemListElement': PRODUCTS.map(function(p, i) {
+      return {
+        '@type': 'ListItem',
+        'position': i + 1,
+        'item': {
+          '@type': 'Product',
+          'name': p.name,
+          'image': origin + p.img,
+          'category': p.cat,
+          'offers': {
+            '@type': 'Offer',
+            'price': p.price.toFixed(2),
+            'priceCurrency': 'USD',
+            'availability': 'https://schema.org/' + (p.soldOut ? 'SoldOut' : 'InStock'),
+            'itemCondition': 'https://schema.org/NewCondition',
+            'url': origin + '/#shop',
+            'seller': { '@id': origin + '/#org' }
+          }
+        }
+      };
+    })
+  };
+  var el = document.createElement('script');
+  el.type = 'application/ld+json';
+  el.textContent = JSON.stringify(ld);
+  document.head.appendChild(el);
+})();
 
 function renderCatPills() {
   var cats = ['All'].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(c,i,a){return a.indexOf(c)===i}));

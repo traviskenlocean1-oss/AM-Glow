@@ -20,6 +20,11 @@ const FREE_SHIPPING_MIN_CENTS = 9900;
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    /* One canonical host for SEO: www.amglowup.com -> amglowup.com. */
+    if (url.hostname === 'www.amglowup.com') {
+      url.hostname = 'amglowup.com';
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname === '/api/square-config' && request.method === 'GET') {
       return squareConfig(env);
     }

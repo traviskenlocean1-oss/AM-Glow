@@ -11,12 +11,12 @@
     { "pattern": "amglowup.com", "custom_domain": true },
     { "pattern": "www.amglowup.com", "custom_domain": true }
   ],
-  // The Worker only handles /api/* (Square payments); every other path is
-  // served directly from static assets without invoking it.
+  // The Worker runs first on every request so it can 301 www -> apex; it
+  // handles /api/* itself and hands everything else to static assets.
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": true
   },
   // Public Square Application ID (it ships to the browser anyway). The
   // access token is a secret: `npx wrangler secret put SQUARE_ACCESS_TOKEN`.
