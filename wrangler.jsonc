@@ -16,7 +16,9 @@
   // Public Square Application ID (it ships to the browser anyway). The
   // access token is a secret: `npx wrangler secret put SQUARE_ACCESS_TOKEN`.
   "vars": {
-    "SQUARE_APP_ID": "sq0idp-YCXHUPV4MmRrr7P1VA6VHw"
+    "SQUARE_APP_ID": "sq0idp-YCXHUPV4MmRrr7P1VA6VHw",
+    // Formspree form that emails each order to the owner's Gmail.
+    "FORMSPREE_ORDER_FORM_ID": "mnpjzpvp"
   },
   "compatibility_flags": [
     "nodejs_compat"

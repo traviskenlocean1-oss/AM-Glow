@@ -545,7 +545,6 @@ var checkoutFormEl = document.getElementById('checkoutForm');
 if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
   e.preventDefault();
   showPayError('');
-  if (selectedPayMethod() !== 'card') { showConfirmation(false); return; }
 
   var btn = document.getElementById('placeOrderBtn');
   var val = function(id){ return document.getElementById(id).value.trim(); };
@@ -553,6 +552,30 @@ if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
     name: val('cfName'), phone: val('cfPhone'), email: val('cfEmail'),
     address: val('cfAddress'), city: val('cfCity'), state: val('cfState'), zip: val('cfZip')
   };
+  var orderItems = cart.map(function(l){ return { id: l.id, qty: l.qty }; });
+
+  /* Phone / WhatsApp: nothing is charged, so the order email to the owner
+     is the order -- only confirm once it has actually been sent. */
+  if (selectedPayMethod() !== 'card') {
+    btn.disabled = true;
+    btn.textContent = 'Sending order…';
+    fetch('/api/order', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items: orderItems, customer: customer })
+    }).then(function(r) {
+      return r.json().then(function(d) {
+        if (!r.ok || !d.ok) throw { userMessage: d.error };
+        showConfirmation(false);
+      });
+    }).catch(function(err) {
+      console.error(err);
+      showPayError((err && err.userMessage) || 'We couldn\'t send your order. Please call or text us at (786) 521-7657 to place it.');
+      btn.disabled = false;
+      btn.textContent = 'Place Order';
+    });
+    return;
+  }
   var nameParts = customer.name.split(/\s+/);
   var subtotal = cart.reduce(function(s,l){ var p = PRODUCTS.find(function(x){return x.id===l.id}); return s + (p ? p.price * l.qty : 0); }, 0);
   var total = subtotal + (subtotal >= 99 ? 0 : 8);
@@ -589,7 +612,7 @@ if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
       body: JSON.stringify({
         sourceId: result.token,
         verificationToken: result.verificationToken,
-        items: cart.map(function(l){ return { id: l.id, qty: l.qty }; }),
+        items: orderItems,
         customer: customer
       })
     });

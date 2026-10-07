@@ -1,12 +1,15 @@
-/* A.M. Glow Up -- Square card payments.
+/* A.M. Glow Up -- Square card payments + order notification emails.
  *
- * Everything except /api/* is served straight from static assets. The two
- * API routes exist so the Square access token never reaches the browser and
- * so the charge amount is computed here, not trusted from the client.
+ * Everything except /api/* is served straight from static assets. The API
+ * routes exist so the Square access token never reaches the browser, so the
+ * charge amount is computed here (not trusted from the client), and so every
+ * order -- card or phone/WhatsApp -- emails the owner a summary.
  *
  * Secrets / vars:
- *   SQUARE_ACCESS_TOKEN  (secret, set with `npx wrangler secret put`)
- *   SQUARE_APP_ID        (public, wrangler.jsonc vars)
+ *   SQUARE_ACCESS_TOKEN      (secret, set with `npx wrangler secret put`)
+ *   SQUARE_APP_ID            (public, wrangler.jsonc vars)
+ *   FORMSPREE_ORDER_FORM_ID  (wrangler.jsonc vars; the Formspree form emails
+ *                             the owner's Gmail)
  */
 
 const SQUARE_API = 'https://connect.squareup.com/v2';
@@ -15,13 +18,16 @@ const SHIPPING_CENTS = 800;
 const FREE_SHIPPING_MIN_CENTS = 9900;
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/api/square-config' && request.method === 'GET') {
       return squareConfig(env);
     }
     if (url.pathname === '/api/pay' && request.method === 'POST') {
-      return pay(request, env);
+      return pay(request, env, ctx);
+    }
+    if (url.pathname === '/api/order' && request.method === 'POST') {
+      return phoneOrder(request, env);
     }
     if (url.pathname.startsWith('/api/')) {
       return json({ error: 'Not found' }, 404);
@@ -77,9 +83,10 @@ async function squareConfig(env) {
   }
 }
 
-/* Prices come from the deployed checkout.html catalog, the same list the
+/* Prices come from the deployed checkout page's catalog, the same list the
    page renders, so there's no third copy to keep in sync. The browser only
-   sends product ids and quantities. */
+   sends product ids and quantities. (/checkout, not /checkout.html -- the
+   assets layer redirects the .html form.) */
 let cachedCatalog = null;
 async function getCatalog(env, request) {
   if (cachedCatalog) return cachedCatalog;
@@ -95,46 +102,120 @@ async function getCatalog(env, request) {
   return catalog;
 }
 
-async function pay(request, env) {
-  if (!env.SQUARE_ACCESS_TOKEN) return json({ error: 'Card payments are not configured yet' }, 503);
+const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+const money = (cents) => '$' + (cents / 100).toFixed(2);
 
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ error: 'Invalid request' }, 400);
-  }
-  const { sourceId, items, customer = {} } = body || {};
-  if (typeof sourceId !== 'string' || !Array.isArray(items) || items.length === 0) {
-    return json({ error: 'Invalid request' }, 400);
-  }
+function cleanCustomer(c = {}) {
+  return {
+    name: str(c.name, 80), phone: str(c.phone, 30), email: str(c.email, 120),
+    address: str(c.address, 120), city: str(c.city, 60), state: str(c.state, 30), zip: str(c.zip, 15),
+  };
+}
 
+/* Shared by card and phone orders: validates the bag against the catalog
+   and returns the authoritative totals. Throws { status, error } on bad
+   input. */
+async function priceOrder(env, request, items) {
+  if (!Array.isArray(items) || items.length === 0) throw { status: 400, error: 'Invalid request' };
   let catalog;
   try {
     catalog = await getCatalog(env, request);
   } catch (err) {
     console.error(err);
-    return json({ error: 'Checkout is temporarily unavailable' }, 503);
+    throw { status: 503, error: 'Checkout is temporarily unavailable' };
   }
-
   let subtotal = 0;
   const lines = [];
   for (const item of items) {
     const product = catalog.get(Number(item.id));
     const qty = Number(item.qty);
     if (!product || !Number.isInteger(qty) || qty < 1 || qty > 50) {
-      return json({ error: 'Your bag has an item that is no longer available. Please refresh and try again.' }, 400);
+      throw { status: 400, error: 'Your bag has an item that is no longer available. Please refresh and try again.' };
     }
     subtotal += product.cents * qty;
-    lines.push(qty + 'x ' + product.name);
+    lines.push({ qty, name: product.name, cents: product.cents * qty });
   }
   const shipping = subtotal >= FREE_SHIPPING_MIN_CENTS ? 0 : SHIPPING_CENTS;
-  const total = subtotal + shipping;
+  return { lines, subtotal, shipping, total: subtotal + shipping };
+}
 
-  const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
-  const note = ('Website order: ' + lines.join(', ') + ' | Ship to: ' +
-    [str(customer.name, 80), str(customer.phone, 30), str(customer.address, 120),
-     str(customer.city, 60), str(customer.state, 30), str(customer.zip, 15)].join(', ')).slice(0, 500);
+/* Order email to the owner via Formspree. Each field becomes its own row
+   in the email, so it reads like a packing slip. */
+async function notifyOrder(env, order, customer, payment) {
+  if (!env.FORMSPREE_ORDER_FORM_ID) throw new Error('FORMSPREE_ORDER_FORM_ID not set');
+  const paid = payment.method === 'card';
+  const shipTo = [customer.address, [customer.city, customer.state].filter(Boolean).join(', '), customer.zip]
+    .filter(Boolean).join(' · ');
+  const body = {
+    _subject: (paid ? 'PAID order ' : 'NEW order (call to collect payment) ') + money(order.total) + ' — ' + (customer.name || 'Customer'),
+    'Payment': paid
+      ? 'PAID by card through Square (' + payment.id + ')'
+      : 'NOT PAID YET — contact the customer by phone or WhatsApp to collect payment',
+    'Items': order.lines.map((l) => l.qty + ' × ' + l.name + ' — ' + money(l.cents)).join('\n'),
+    'Subtotal': money(order.subtotal),
+    'Shipping': order.shipping === 0 ? 'Free' : money(order.shipping),
+    'Total': money(order.total),
+    'Customer': customer.name,
+    'Phone': customer.phone,
+    'Email': customer.email,
+    'Ship to': shipTo,
+  };
+  if (customer.email) body._replyto = customer.email;
+  const res = await fetch('https://formspree.io/f/' + env.FORMSPREE_ORDER_FORM_ID, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', accept: 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('Formspree ' + res.status + ': ' + (await res.text()).slice(0, 300));
+}
+
+async function readJson(request) {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+/* Phone / WhatsApp orders: nothing is charged, so the email IS the order --
+   if it fails to send, the customer has to be told rather than shown a
+   confirmation for an order nobody will ever see. */
+async function phoneOrder(request, env) {
+  const body = await readJson(request);
+  if (!body) return json({ error: 'Invalid request' }, 400);
+  let order;
+  try {
+    order = await priceOrder(env, request, body.items);
+  } catch (e) {
+    return json({ error: e.error || 'Invalid request' }, e.status || 400);
+  }
+  const customer = cleanCustomer(body.customer);
+  if (!customer.name || !customer.phone) return json({ error: 'Please add your name and phone number.' }, 400);
+  try {
+    await notifyOrder(env, order, customer, { method: 'phone' });
+  } catch (err) {
+    console.error('Phone order notification failed', err);
+    return json({ error: 'We couldn\'t send your order. Please call or text us at (786) 521-7657 to place it.' }, 502);
+  }
+  return json({ ok: true, total: order.total });
+}
+
+async function pay(request, env, ctx) {
+  if (!env.SQUARE_ACCESS_TOKEN) return json({ error: 'Card payments are not configured yet' }, 503);
+
+  const body = await readJson(request);
+  if (!body || typeof body.sourceId !== 'string') return json({ error: 'Invalid request' }, 400);
+
+  let order;
+  try {
+    order = await priceOrder(env, request, body.items);
+  } catch (e) {
+    return json({ error: e.error || 'Invalid request' }, e.status || 400);
+  }
+  const customer = cleanCustomer(body.customer);
+
+  const note = ('Website order: ' + order.lines.map((l) => l.qty + 'x ' + l.name).join(', ') + ' | Ship to: ' +
+    [customer.name, customer.phone, customer.address, customer.city, customer.state, customer.zip].join(', ')).slice(0, 500);
 
   let locationId;
   try {
@@ -146,21 +227,20 @@ async function pay(request, env) {
 
   const payment = {
     idempotency_key: crypto.randomUUID(),
-    source_id: sourceId,
-    amount_money: { amount: total, currency: 'USD' },
+    source_id: body.sourceId,
+    amount_money: { amount: order.total, currency: 'USD' },
     location_id: locationId,
     autocomplete: true,
     note,
     shipping_address: {
-      address_line_1: str(customer.address, 120),
-      locality: str(customer.city, 60),
-      administrative_district_level_1: str(customer.state, 30),
-      postal_code: str(customer.zip, 15),
+      address_line_1: customer.address,
+      locality: customer.city,
+      administrative_district_level_1: customer.state,
+      postal_code: customer.zip,
       country: 'US',
     },
   };
-  const email = str(customer.email, 120);
-  if (email) payment.buyer_email_address = email;
+  if (customer.email) payment.buyer_email_address = customer.email;
   if (typeof body.verificationToken === 'string') payment.verification_token = body.verificationToken;
 
   const res = await squareFetch(env, '/payments', { method: 'POST', body: JSON.stringify(payment) });
@@ -170,7 +250,14 @@ async function pay(request, env) {
     console.error('Square payment failed', res.status, JSON.stringify(data.errors || data));
     return json({ error: friendlyError(code) }, 402);
   }
-  return json({ ok: true, paymentId: data.payment.id, receiptUrl: data.payment.receipt_url || null, total });
+
+  /* The charge already succeeded, so a failed email must not fail the
+     response -- the payment still shows in her Square dashboard. */
+  ctx.waitUntil(
+    notifyOrder(env, order, customer, { method: 'card', id: data.payment.id })
+      .catch((err) => console.error('Card order notification failed', data.payment.id, err))
+  );
+  return json({ ok: true, paymentId: data.payment.id, receiptUrl: data.payment.receipt_url || null, total: order.total });
 }
 
 function friendlyError(code) {
