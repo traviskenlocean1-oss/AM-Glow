@@ -174,6 +174,10 @@
   .p-tag{position:absolute;top:12px;left:12px;background:#fff;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
   .p-quick{position:absolute;bottom:12px;left:12px;right:12px;background:var(--ink);color:#fff;text-align:center;padding:11px;border-radius:12px;font-size:12px;font-weight:700;letter-spacing:.04em;opacity:0;transform:translateY(8px);transition:all .25s ease}
   .p-card:hover .p-quick{opacity:1;transform:none}
+  .p-card.sold-out .p-media img{opacity:.45;filter:grayscale(.6)}
+  .p-card.sold-out .p-quick{display:none}
+  .p-sold{position:absolute;top:12px;right:12px;background:var(--ink);color:#fff;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+  #pmAdd[disabled]{background:var(--ink-soft);box-shadow:none;cursor:not-allowed}
   .p-card:hover .p-media{transform:translateY(-3px);box-shadow:var(--shadow)}
   .p-name{font-weight:600;font-size:17px;margin-bottom:4px}
   .p-price{color:var(--pink-deep);font-weight:800;font-size:16px}
@@ -463,7 +467,7 @@ var I18N = {
     'contact.send':'Send Message','contact.callText':'Call or text','contact.tiktokText':'Shop with us on TikTok',
     'contact.facebookText':'Follow us on Facebook','contact.instagramText':'Follow us on Instagram',
     'footer.tag':'Curated resale, Miami, FL.','footer.rights':'All rights reserved.','footer.built':'Miami, FL',
-    'cart.title':'Your Bag','cart.subtotal':'Subtotal','cart.checkout':'Checkout','cart.add':'Add to Bag',
+    'cart.title':'Your Bag','cart.subtotal':'Subtotal','cart.checkout':'Checkout','cart.add':'Add to Bag','p.soldout':'Sold Out',
     'cart.empty':'Your bag is empty.','cart.continue':'Continue Shopping',
     'product.desc':'Checked for authenticity and condition before it ships. Once it\'s gone, it\'s gone.',
     'checkout.title':'Almost there','checkout.sub':"Online payments are being finalized — for now, we'll confirm your order by phone or TikTok.",
@@ -485,7 +489,7 @@ var I18N = {
     'contact.send':'Voye Mesaj','contact.callText':'Rele oswa tèks','contact.tiktokText':'Achte avèk nou sou TikTok',
     'contact.facebookText':'Swiv nou sou Facebook','contact.instagramText':'Swiv nou sou Instagram',
     'footer.tag':'Rezanti chwazi, Miami, FL.','footer.rights':'Tout dwa rezève.','footer.built':'Miami, FL',
-    'cart.title':'Sak Ou','cart.subtotal':'Total Pasyèl','cart.checkout':'Peye Kounye a','cart.add':'Mete nan Sak',
+    'cart.title':'Sak Ou','cart.subtotal':'Total Pasyèl','cart.checkout':'Peye Kounye a','cart.add':'Mete nan Sak','p.soldout':'Fini',
     'cart.empty':'Sak ou vid.','cart.continue':'Kontinye Achte',
     'product.desc':'Verifye pou orijinalite ak kondisyon anvan li anvwaye. Lè li fini, li fini.',
     'checkout.title':'Prèske fini','checkout.sub':'Peman anliy ap byento disponib — pou kounye a, n ap konfime kòmand ou pa telefòn oswa TikTok.',
@@ -507,7 +511,7 @@ var I18N = {
     'contact.send':'Enviar Mensaje','contact.callText':'Llama o envía un mensaje','contact.tiktokText':'Compra con nosotros en TikTok',
     'contact.facebookText':'Síguenos en Facebook','contact.instagramText':'Síguenos en Instagram',
     'footer.tag':'Reventa curada, Miami, FL.','footer.rights':'Todos los derechos reservados.','footer.built':'Miami, FL',
-    'cart.title':'Tu Bolsa','cart.subtotal':'Subtotal','cart.checkout':'Pagar','cart.add':'Añadir a la Bolsa',
+    'cart.title':'Tu Bolsa','cart.subtotal':'Subtotal','cart.checkout':'Pagar','cart.add':'Añadir a la Bolsa','p.soldout':'Agotado',
     'cart.empty':'Tu bolsa está vacía.','cart.continue':'Seguir Comprando',
     'product.desc':'Verificado por autenticidad y condición antes de enviarse. Una vez que se acaba, se acabó.',
     'checkout.title':'Ya casi está','checkout.sub':'Los pagos en línea se están finalizando — por ahora confirmaremos tu pedido por teléfono o TikTok.',
@@ -551,18 +555,18 @@ function applyLang(lang) {
    placed on white. Prices are placeholder estimates (marked so below);
    swap them for her real pricing before this goes live for real sales. */
 var PRODUCTS = [
-  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      cat:'Wellness',    price:22, img:'/assets/products/neocell-collagen-protein.jpg' },
-  { id:2,  name:'Giorgio Armani My Way EDP',                  cat:'Fragrance',   price:35, img:'/assets/products/armani-my-way.jpg' },
-  { id:3,  name:'Valentino Uomo Born in Roma — Green',        cat:'Fragrance',   price:20, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
-  { id:4,  name:'Valentino Donna EDP',                        cat:'Fragrance',   price:30, img:'/assets/products/valentino-donna.jpg' },
-  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        cat:'Fragrance',   price:20, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
-  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       cat:'Skincare',    price:12, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
+  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      cat:'Wellness',    price:29.99, img:'/assets/products/neocell-collagen-protein.jpg' },
+  { id:2,  name:'Giorgio Armani My Way EDP',                  cat:'Fragrance',   price:49.99, img:'/assets/products/armani-my-way.jpg' },
+  { id:3,  name:'Valentino Uomo Born in Roma — Green',        cat:'Fragrance',   price:35, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
+  { id:4,  name:'Valentino Donna EDP',                        cat:'Fragrance',   price:35, img:'/assets/products/valentino-donna.jpg' },
+  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        cat:'Fragrance',   price:35, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
+  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       cat:'Skincare',    price:20, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
   { id:7,  name:'Nourisoy Nutritional Blend',                 cat:'Wellness',    price:4,  img:'/assets/products/nourisoy.jpg' },
-  { id:8,  name:'Vaseline Original Healing Jelly',             cat:'Skincare',    price:6,  img:'/assets/products/vaseline-healing-jelly.jpg' },
-  { id:9,  name:'Byenblan Papaya Face & Body Soap',           cat:'Bath & Body', price:5,  img:'/assets/products/byenblan-papaya-soap.jpg' },
+  { id:8,  name:'Vaseline Original Healing Jelly',             cat:'Skincare',    price:11, img:'/assets/products/vaseline-healing-jelly.jpg' },
+  { id:9,  name:'Byenblan Papaya Face & Body Soap',           cat:'Bath & Body', price:7, img:'/assets/products/byenblan-papaya-soap.jpg' },
   { id:10, name:'CT+ Clear Therapy Serum',                    cat:'Skincare',    price:14, img:'/assets/products/ct-plus-clear-therapy-serum.jpg' },
   { id:11, name:'Ryan Blake No. 44',                          cat:'Fragrance',   price:15, img:'/assets/products/ryan-blake-44.jpg' },
-  { id:12, name:'CaroTone Brightening Oil',                   cat:'Skincare',    price:13, img:'/assets/products/carotone-brightening-oil.jpg' },
+  { id:12, name:'CaroTone Brightening Oil',                   cat:'Skincare',    price:12, img:'/assets/products/carotone-brightening-oil.jpg' },
   { id:13, name:'CaroTone Natural Glow Body Cream',           cat:'Skincare',    price:13, img:'/assets/products/carotone-body-cream.jpg' },
   { id:14, name:'Idolé Savon Bébé Carotte',                   cat:'Bath & Body', price:5,  img:'/assets/products/idole-savon-bebe.jpg' },
   { id:15, name:'Jabón Germicida Roldán',                     cat:'Bath & Body', price:5,  img:'/assets/products/jabon-germicida-roldan.jpg' },
@@ -586,8 +590,8 @@ var PRODUCTS = [
   { id:33, name:'Glister Multi-Action Toothpaste',            cat:'Bath & Body', price:7,  img:'/assets/products/glister-toothpaste.jpg' },
   { id:34, name:'ActiMed Anti-Dandruff Shampoo',              cat:'Hair Care',   price:9,  img:'/assets/products/actimed-shampoo.jpg' },
   { id:35, name:'CareTone Beauty Soap & Cream Set',           cat:'Skincare',    price:14, img:'/assets/products/caretone-soap-set.jpg' },
-  { id:36, name:'AMG Gout & Uric Acid Balance Tea',           cat:'Wellness',    price:8,  img:'/assets/products/amg-gout-uric-acid-tea.jpg' },
-  { id:37, name:'AMG Energy Herbal Tea',                      cat:'Wellness',    price:8,  img:'/assets/products/amg-energy-tea.jpg' },
+  { id:36, name:'AMG Gout & Uric Acid Balance Tea',           cat:'Wellness',    price:49.99, img:'/assets/products/amg-gout-uric-acid-tea.jpg' },
+  { id:37, name:'AMG Energy Herbal Tea',                      cat:'Wellness',    price:49.99, img:'/assets/products/amg-energy-tea.jpg' },
   { id:38, name:'Yoni Detox Pearls',                          cat:'Wellness',    price:10, img:'/assets/products/yoni-detox-pearls.jpg' },
   { id:39, name:'Supreme 3 Days Lightening Cream',            cat:'Skincare',    price:10, img:'/assets/products/supreme-3days-no-taches.jpg' },
   { id:40, name:'DermaPro Intensive Lightening Body Cream',   cat:'Skincare',    price:11, img:'/assets/products/dermapro-lightening-cream.jpg' },
@@ -598,19 +602,25 @@ var PRODUCTS = [
   { id:45, name:'Bio Claire Lightening Body Lotion',          cat:'Skincare',    price:12, img:'/assets/products/bioclaire-lotion.jpg' },
   { id:46, name:'Bio Claire Clarifying Body Cream',           cat:'Skincare',    price:12, img:'/assets/products/bioclaire-cream-jar.jpg' },
   { id:47, name:'CT+ ClearTherapy Extra Lightening Lotion',   cat:'Skincare',    price:13, img:'/assets/products/ctplus-cleartherapy-lotion.jpg' },
-  { id:48, name:'Chanel Miniature Perfume Gift Set',          cat:'Fragrance',   price:45, img:'/assets/products/chanel-mini-set.jpg' },
-  { id:49, name:'Valentino Born in Roma Trio Gift Set',       cat:'Fragrance',   price:40, img:'/assets/products/valentino-born-in-roma-trio.jpg' },
-  { id:50, name:'Valentino Donna Born in Roma EDP',           cat:'Fragrance',   price:32, img:'/assets/products/valentino-donna-born-in-roma.jpg' },
-  { id:51, name:'YSL Libre Eau de Parfum',                    cat:'Fragrance',   price:38, img:'/assets/products/ysl-libre.jpg' },
-  { id:52, name:'YSL Mon Paris Eau de Parfum',                cat:'Fragrance',   price:36, img:'/assets/products/ysl-mon-paris.jpg' },
-  { id:53, name:'Giorgio Armani Si Passione EDP',             cat:'Fragrance',   price:34, img:'/assets/products/armani-si-passione.jpg' },
-  { id:54, name:'Hermes Terre d\'Hermes EDT',                 cat:'Fragrance',   price:30, img:'/assets/products/hermes-terre-dhermes.jpg' },
-  { id:55, name:'Giorgio Armani Prive Heart Gift Set',        cat:'Fragrance',   price:48, img:'/assets/products/armani-prive-heart-set.jpg' },
-  { id:56, name:'CaroTone Gift Set',                          cat:'Skincare',    price:18, img:'/assets/products/carotone-gift-set.jpg' },
-  { id:57, name:'AMG Feminine Care Set',                      cat:'Wellness',    price:22, img:'/assets/products/amg-feminine-set-group.jpg' }
+  { id:48, name:'Chanel Miniature Perfume Gift Set',          cat:'Fragrance',   price:49.99, img:'/assets/products/chanel-mini-set.jpg' },
+  { id:49, name:'Valentino Born in Roma Trio Gift Set',       cat:'Fragrance',   price:50, img:'/assets/products/valentino-born-in-roma-trio.jpg' },
+  { id:50, name:'Valentino Donna Born in Roma EDP',           cat:'Fragrance',   price:59.99, img:'/assets/products/valentino-donna-born-in-roma.jpg' },
+  { id:51, name:'YSL Libre Eau de Parfum',                    cat:'Fragrance',   price:59.99, img:'/assets/products/ysl-libre.jpg' },
+  { id:52, name:'YSL Mon Paris Eau de Parfum',                cat:'Fragrance',   price:50, img:'/assets/products/ysl-mon-paris.jpg', soldOut:true },
+  { id:53, name:'Giorgio Armani Si Passione EDP',             cat:'Fragrance',   price:59.99, img:'/assets/products/armani-si-passione.jpg' },
+  { id:54, name:'Hermes Terre d\'Hermes EDT',                 cat:'Fragrance',   price:30, img:'/assets/products/hermes-terre-dhermes.jpg', soldOut:true },
+  { id:55, name:'Giorgio Armani Prive Heart Gift Set',        cat:'Fragrance',   price:79.99, img:'/assets/products/armani-prive-heart-set.jpg' },
+  { id:56, name:'CaroTone Gift Set',                          cat:'Skincare',    price:69.99, img:'/assets/products/carotone-gift-set.jpg' },
+  { id:57, name:'AMG Feminine Care Set',                      cat:'Wellness',    price:160, img:'/assets/products/amg-feminine-set-group.jpg' }
 ];
 var activeCat = 'All';
-var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]');
+/* Prices can have cents (e.g. 29.99); whole-dollar prices show without .00. */
+function fmt(n) { n = Math.round(n * 100) / 100; return '$' + (n % 1 === 0 ? n : n.toFixed(2)); }
+function isSoldOut(id) { var p = PRODUCTS.find(function(x){return x.id===id}); return !p || !!p.soldOut; }
+
+/* Drop anything that has since sold out from a saved bag. */
+var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]').filter(function(l){ return !isSoldOut(l.id); });
+localStorage.setItem('amg_cart', JSON.stringify(cart));
 
 function renderCatPills() {
   var cats = ['All'].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(c,i,a){return a.indexOf(c)===i}));
@@ -648,12 +658,13 @@ function renderNavCategories() {
 function renderShopGrid() {
   var list = activeCat === 'All' ? PRODUCTS : PRODUCTS.filter(function(p){return p.cat===activeCat});
   document.getElementById('shopGrid').innerHTML = list.map(function(p) {
-    return '<div class="p-card" data-id="'+p.id+'">'
+    return '<div class="p-card'+(p.soldOut?' sold-out':'')+'" data-id="'+p.id+'">'
       + '<div class="p-media"><span class="p-tag">'+p.cat+'</span>'
+        + (p.soldOut ? '<span class="p-sold">'+I18N[currentLang]['p.soldout']+'</span>' : '')
         + (p.img ? '<img src="'+p.img+'" alt="'+p.name+'">' : '<div class="ph">Photo<br>Coming Soon</div>')
       + '<div class="p-quick">'+I18N[currentLang]['cart.add']+'</div></div>'
       + '<div class="p-name">'+p.name+'</div>'
-      + '<div class="p-price">$'+p.price+'</div>'
+      + '<div class="p-price">'+fmt(p.price)+'</div>'
     + '</div>';
   }).join('');
   document.querySelectorAll('.p-card').forEach(function(card) {
@@ -668,13 +679,17 @@ function openProductModal(id) {
   document.getElementById('pmPhoto').innerHTML = p.img ? '<img src="'+p.img+'" alt="'+p.name+'" style="width:100%;height:100%;object-fit:cover">' : 'Photo Coming Soon';
   document.getElementById('pmTag').textContent = p.cat;
   document.getElementById('pmName').textContent = p.name;
-  document.getElementById('pmPrice').textContent = '$'+p.price;
-  document.getElementById('pmAdd').onclick = function() { addToCart(p.id); closeModal('productModal'); openCart(); };
+  document.getElementById('pmPrice').textContent = fmt(p.price);
+  var pmAdd = document.getElementById('pmAdd');
+  pmAdd.disabled = !!p.soldOut;
+  pmAdd.textContent = I18N[currentLang][p.soldOut ? 'p.soldout' : 'cart.add'];
+  pmAdd.onclick = p.soldOut ? null : function() { addToCart(p.id); closeModal('productModal'); openCart(); };
   openModal('productModal');
 }
 
 /* ── Cart ── */
 function addToCart(id) {
+  if (isSoldOut(id)) return;
   var line = cart.find(function(l){return l.id===id});
   if (line) line.qty++; else cart.push({id:id, qty:1});
   saveCart(); renderCart();
@@ -707,11 +722,11 @@ function renderCart() {
     return '<div class="cart-item">'
       + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'No Photo')+'</div>'
       + '<div class="cart-item-info"><div style="font-weight:700;font-size:14px">'+p.name+'</div>'
-      + '<div style="color:var(--ink-soft);font-size:13px">$'+p.price+'</div>'
+      + '<div style="color:var(--ink-soft);font-size:13px">'+fmt(p.price)+'</div>'
       + '<div class="qty-ctrl"><button onclick="changeQty('+p.id+',-1)">&minus;</button><span>'+l.qty+'</span><button onclick="changeQty('+p.id+',1)">&plus;</button></div>'
       + '</div></div>';
   }).join('');
-  document.getElementById('cartSubtotal').textContent = '$'+subtotal;
+  document.getElementById('cartSubtotal').textContent = fmt(subtotal);
   document.getElementById('cartFoot').style.display = 'block';
 }
 

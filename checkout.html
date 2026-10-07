@@ -303,18 +303,18 @@ document.getElementById('year').textContent = new Date().getFullYear();
    is a single-file-per-page build, same convention as the rest of the
    site. If products change, update both files. */
 var PRODUCTS = [
-  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      price:22, img:'/assets/products/neocell-collagen-protein.jpg' },
-  { id:2,  name:'Giorgio Armani My Way EDP',                  price:35, img:'/assets/products/armani-my-way.jpg' },
-  { id:3,  name:'Valentino Uomo Born in Roma — Green',        price:20, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
-  { id:4,  name:'Valentino Donna EDP',                        price:30, img:'/assets/products/valentino-donna.jpg' },
-  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        price:20, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
-  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       price:12, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
+  { id:1,  name:'NeoCell Collagen Bio-Peptides Protein',      price:29.99, img:'/assets/products/neocell-collagen-protein.jpg' },
+  { id:2,  name:'Giorgio Armani My Way EDP',                  price:49.99, img:'/assets/products/armani-my-way.jpg' },
+  { id:3,  name:'Valentino Uomo Born in Roma — Green',        price:35, img:'/assets/products/valentino-uomo-green-stravaganza.jpg' },
+  { id:4,  name:'Valentino Donna EDP',                        price:35, img:'/assets/products/valentino-donna.jpg' },
+  { id:5,  name:'Valentino Uomo Born in Roma — Coral',        price:35, img:'/assets/products/valentino-uomo-coral-fantasy.jpg' },
+  { id:6,  name:'3-in-1 Collagen Sun Protection Cream',       price:20, img:'/assets/products/collagen-3in1-sun-cream.jpg' },
   { id:7,  name:'Nourisoy Nutritional Blend',                 price:4,  img:'/assets/products/nourisoy.jpg' },
-  { id:8,  name:'Vaseline Original Healing Jelly',             price:6,  img:'/assets/products/vaseline-healing-jelly.jpg' },
-  { id:9,  name:'Byenblan Papaya Face & Body Soap',           price:5,  img:'/assets/products/byenblan-papaya-soap.jpg' },
+  { id:8,  name:'Vaseline Original Healing Jelly',             price:11, img:'/assets/products/vaseline-healing-jelly.jpg' },
+  { id:9,  name:'Byenblan Papaya Face & Body Soap',           price:7, img:'/assets/products/byenblan-papaya-soap.jpg' },
   { id:10, name:'CT+ Clear Therapy Serum',                    price:14, img:'/assets/products/ct-plus-clear-therapy-serum.jpg' },
   { id:11, name:'Ryan Blake No. 44',                          price:15, img:'/assets/products/ryan-blake-44.jpg' },
-  { id:12, name:'CaroTone Brightening Oil',                   price:13, img:'/assets/products/carotone-brightening-oil.jpg' },
+  { id:12, name:'CaroTone Brightening Oil',                   price:12, img:'/assets/products/carotone-brightening-oil.jpg' },
   { id:13, name:'CaroTone Natural Glow Body Cream',           price:13, img:'/assets/products/carotone-body-cream.jpg' },
   { id:14, name:'Idolé Savon Bébé Carotte',                   price:5,  img:'/assets/products/idole-savon-bebe.jpg' },
   { id:15, name:'Jabón Germicida Roldán',                     price:5,  img:'/assets/products/jabon-germicida-roldan.jpg' },
@@ -338,8 +338,8 @@ var PRODUCTS = [
   { id:33, name:'Glister Multi-Action Toothpaste',            price:7,  img:'/assets/products/glister-toothpaste.jpg' },
   { id:34, name:'ActiMed Anti-Dandruff Shampoo',              price:9,  img:'/assets/products/actimed-shampoo.jpg' },
   { id:35, name:'CareTone Beauty Soap & Cream Set',           price:14, img:'/assets/products/caretone-soap-set.jpg' },
-  { id:36, name:'AMG Gout & Uric Acid Balance Tea',           price:8,  img:'/assets/products/amg-gout-uric-acid-tea.jpg' },
-  { id:37, name:'AMG Energy Herbal Tea',                      price:8,  img:'/assets/products/amg-energy-tea.jpg' },
+  { id:36, name:'AMG Gout & Uric Acid Balance Tea',           price:49.99, img:'/assets/products/amg-gout-uric-acid-tea.jpg' },
+  { id:37, name:'AMG Energy Herbal Tea',                      price:49.99, img:'/assets/products/amg-energy-tea.jpg' },
   { id:38, name:'Yoni Detox Pearls',                          price:10, img:'/assets/products/yoni-detox-pearls.jpg' },
   { id:39, name:'Supreme 3 Days Lightening Cream',            price:10, img:'/assets/products/supreme-3days-no-taches.jpg' },
   { id:40, name:'DermaPro Intensive Lightening Body Cream',   price:11, img:'/assets/products/dermapro-lightening-cream.jpg' },
@@ -350,19 +350,24 @@ var PRODUCTS = [
   { id:45, name:'Bio Claire Lightening Body Lotion',          price:12, img:'/assets/products/bioclaire-lotion.jpg' },
   { id:46, name:'Bio Claire Clarifying Body Cream',           price:12, img:'/assets/products/bioclaire-cream-jar.jpg' },
   { id:47, name:'CT+ ClearTherapy Extra Lightening Lotion',   price:13, img:'/assets/products/ctplus-cleartherapy-lotion.jpg' },
-  { id:48, name:'Chanel Miniature Perfume Gift Set',          price:45, img:'/assets/products/chanel-mini-set.jpg' },
-  { id:49, name:'Valentino Born in Roma Trio Gift Set',       price:40, img:'/assets/products/valentino-born-in-roma-trio.jpg' },
-  { id:50, name:'Valentino Donna Born in Roma EDP',           price:32, img:'/assets/products/valentino-donna-born-in-roma.jpg' },
-  { id:51, name:'YSL Libre Eau de Parfum',                    price:38, img:'/assets/products/ysl-libre.jpg' },
-  { id:52, name:'YSL Mon Paris Eau de Parfum',                price:36, img:'/assets/products/ysl-mon-paris.jpg' },
-  { id:53, name:'Giorgio Armani Si Passione EDP',             price:34, img:'/assets/products/armani-si-passione.jpg' },
-  { id:54, name:'Hermes Terre d\'Hermes EDT',                 price:30, img:'/assets/products/hermes-terre-dhermes.jpg' },
-  { id:55, name:'Giorgio Armani Prive Heart Gift Set',        price:48, img:'/assets/products/armani-prive-heart-set.jpg' },
-  { id:56, name:'CaroTone Gift Set',                          price:18, img:'/assets/products/carotone-gift-set.jpg' },
-  { id:57, name:'AMG Feminine Care Set',                      price:22, img:'/assets/products/amg-feminine-set-group.jpg' }
+  { id:48, name:'Chanel Miniature Perfume Gift Set',          price:49.99, img:'/assets/products/chanel-mini-set.jpg' },
+  { id:49, name:'Valentino Born in Roma Trio Gift Set',       price:50, img:'/assets/products/valentino-born-in-roma-trio.jpg' },
+  { id:50, name:'Valentino Donna Born in Roma EDP',           price:59.99, img:'/assets/products/valentino-donna-born-in-roma.jpg' },
+  { id:51, name:'YSL Libre Eau de Parfum',                    price:59.99, img:'/assets/products/ysl-libre.jpg' },
+  { id:52, name:'YSL Mon Paris Eau de Parfum',                price:50, img:'/assets/products/ysl-mon-paris.jpg', soldOut:true },
+  { id:53, name:'Giorgio Armani Si Passione EDP',             price:59.99, img:'/assets/products/armani-si-passione.jpg' },
+  { id:54, name:'Hermes Terre d\'Hermes EDT',                 price:30, img:'/assets/products/hermes-terre-dhermes.jpg', soldOut:true },
+  { id:55, name:'Giorgio Armani Prive Heart Gift Set',        price:79.99, img:'/assets/products/armani-prive-heart-set.jpg' },
+  { id:56, name:'CaroTone Gift Set',                          price:69.99, img:'/assets/products/carotone-gift-set.jpg' },
+  { id:57, name:'AMG Feminine Care Set',                      price:160, img:'/assets/products/amg-feminine-set-group.jpg' }
 ];
 
-var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]');
+function fmt(n) { n = Math.round(n * 100) / 100; return '$' + (n % 1 === 0 ? n : n.toFixed(2)); }
+/* Drop anything that has since sold out from a saved bag. */
+var cart = JSON.parse(localStorage.getItem('amg_cart') || '[]').filter(function(l){
+  var p = PRODUCTS.find(function(x){return x.id===l.id}); return p && !p.soldOut;
+});
+localStorage.setItem('amg_cart', JSON.stringify(cart));
 
 function changeQty(id, delta) {
   var line = cart.find(function(l){return l.id===id});
@@ -394,11 +399,11 @@ function renderAll() {
       return '<div class="cart-item">'
         + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'No Photo')+'</div>'
         + '<div class="cart-item-info"><div style="font-weight:700;font-size:14px">'+p.name+'</div>'
-        + '<div style="color:var(--ink-soft);font-size:13px">$'+p.price+'</div>'
+        + '<div style="color:var(--ink-soft);font-size:13px">'+fmt(p.price)+'</div>'
         + '<div class="qty-ctrl"><button onclick="changeQty('+p.id+',-1)">&minus;</button><span>'+l.qty+'</span><button onclick="changeQty('+p.id+',1)">&plus;</button></div>'
         + '</div></div>';
     }).join('');
-    document.getElementById('cartSubtotal').textContent = '$'+subtotal;
+    document.getElementById('cartSubtotal').textContent = fmt(subtotal);
     document.getElementById('cartFoot').style.display = 'block';
   }
 
@@ -420,14 +425,14 @@ function renderAll() {
     subtotal2 += lineTotal;
     return '<div class="order-item">'
       + '<div class="ph">'+(p.img?'<img src="'+p.img+'" alt="'+p.name+'">':'')+'</div>'
-      + '<div class="order-item-info"><div class="nm">'+p.name+'</div><div class="qp">Qty '+l.qty+' &times; $'+p.price+'</div></div>'
-      + '<div class="lp">$'+lineTotal+'</div>'
+      + '<div class="order-item-info"><div class="nm">'+p.name+'</div><div class="qp">Qty '+l.qty+' &times; '+fmt(p.price)+'</div></div>'
+      + '<div class="lp">'+fmt(lineTotal)+'</div>'
       + '</div>';
   }).join('');
   var shipping = subtotal2 >= 99 ? 0 : 8;
-  document.getElementById('orderSubtotal').textContent = '$'+subtotal2;
-  document.getElementById('orderShipping').textContent = shipping === 0 ? 'Free' : '$'+shipping;
-  document.getElementById('orderTotal').textContent = '$'+(subtotal2 + shipping);
+  document.getElementById('orderSubtotal').textContent = fmt(subtotal2);
+  document.getElementById('orderShipping').textContent = shipping === 0 ? 'Free' : fmt(shipping);
+  document.getElementById('orderTotal').textContent = fmt(subtotal2 + shipping);
 }
 renderAll();
 
@@ -587,7 +592,7 @@ if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
   loadSquareCard().then(function() {
     if (!squareCard) throw { userMessage: 'Card payments are unavailable right now. Please choose "Confirm by Phone / WhatsApp".' };
     return squareCard.tokenize({
-      amount: total.toFixed(2),
+      amount: (Math.round(total * 100) / 100).toFixed(2),
       currencyCode: 'USD',
       intent: 'CHARGE',
       customerInitiated: true,

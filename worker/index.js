@@ -93,9 +93,13 @@ async function getCatalog(env, request) {
   const res = await env.ASSETS.fetch(new URL('/checkout', request.url));
   const html = await res.text();
   const catalog = new Map();
-  const re = /\{\s*id:\s*(\d+),\s*name:\s*'((?:\\'|[^'])*)',\s*price:\s*(\d+(?:\.\d+)?)/g;
+  const re = /\{\s*id:\s*(\d+),\s*name:\s*'((?:\\'|[^'])*)',\s*price:\s*(\d+(?:\.\d+)?)[^}]*\}/g;
   for (const m of html.matchAll(re)) {
-    catalog.set(Number(m[1]), { name: m[2].replace(/\\'/g, "'"), cents: Math.round(Number(m[3]) * 100) });
+    catalog.set(Number(m[1]), {
+      name: m[2].replace(/\\'/g, "'"),
+      cents: Math.round(Number(m[3]) * 100),
+      soldOut: /soldOut:\s*true/.test(m[0]),
+    });
   }
   if (catalog.size === 0) throw new Error('Could not read product catalog');
   cachedCatalog = catalog;
@@ -129,7 +133,7 @@ async function priceOrder(env, request, items) {
   for (const item of items) {
     const product = catalog.get(Number(item.id));
     const qty = Number(item.qty);
-    if (!product || !Number.isInteger(qty) || qty < 1 || qty > 50) {
+    if (!product || product.soldOut || !Number.isInteger(qty) || qty < 1 || qty > 50) {
       throw { status: 400, error: 'Your bag has an item that is no longer available. Please refresh and try again.' };
     }
     subtotal += product.cents * qty;
