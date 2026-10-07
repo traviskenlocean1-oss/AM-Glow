@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://web.squarecdn.com/v1/square.js"></script>
 
 <style>
   :root{
@@ -92,6 +93,10 @@
   .pay-option .ps{font-size:12px;color:var(--ink-soft)}
   .card-fields{border:1.5px solid var(--line);border-top:none;border-radius:0 0 14px 14px;margin:-12px 0 12px;padding:20px 18px 4px}
   .card-fields .form-row{grid-template-columns:1fr 1fr}
+  .card-status{font-size:13px;color:var(--ink-soft);margin:0 0 16px}
+  .card-status:empty{display:none}
+  .pay-error{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;background:#fdecef;color:#b3123e;font-size:13px;line-height:1.5}
+  #placeOrderBtn[disabled]{opacity:.6;cursor:wait}
   .pay-secure-note{display:flex;align-items:center;gap:9px;margin:-4px 0 12px;padding:12px 14px;background:var(--paper-soft);border-radius:10px;font-size:12px;color:var(--ink-soft);line-height:1.5}
   .pay-secure-note svg{flex-shrink:0;color:var(--pink-deep)}
 
@@ -219,12 +224,8 @@
               <div><div class="pt">Credit / Debit Card</div><div class="ps">Pay securely with your card.</div></div>
             </label>
             <div class="card-fields" id="cardFields" style="display:none">
-              <div class="field"><label>Card Number</label><input type="text" id="cfCardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19"></div>
-              <div class="field"><label>Name on Card</label><input type="text" id="cfCardName" autocomplete="cc-name" placeholder="Full name as shown on card"></div>
-              <div class="form-row">
-                <div class="field"><label>Expiry Date</label><input type="text" id="cfCardExpiry" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
-                <div class="field"><label>CVC</label><input type="text" id="cfCardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4"></div>
-              </div>
+              <div id="card-container"></div>
+              <p class="card-status" id="cardStatus">Loading secure card form…</p>
             </div>
             <div class="pay-secure-note" id="paySecureNote" style="display:none">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -242,6 +243,7 @@
             <div class="row total"><span>Total</span><span id="orderTotal">$0</span></div>
           </div>
           <button type="submit" form="checkoutForm" class="btn btn-pink" id="placeOrderBtn" style="width:100%;justify-content:center;margin-top:22px">Place Order</button>
+          <div class="pay-error" id="payError" role="alert"></div>
         </div>
 
       </div>
@@ -254,7 +256,7 @@
     <div class="confirm-icon">&#10003;</div>
     <span class="eyebrow">Order Confirmed</span>
     <h1>Thank You.</h1>
-    <p>Thank you for shopping with A.M. Glow Up. Your order has been placed — we'll reach out by phone or WhatsApp shortly to confirm and arrange payment.</p>
+    <p id="confirmMsg">Thank you for shopping with A.M. Glow Up. Your order has been placed — we'll reach out by phone or WhatsApp shortly to confirm and arrange payment.</p>
     <a href="index.html#shop" class="btn btn-pink">Continue Shopping</a>
   </div>
 </section>
@@ -438,9 +440,39 @@ document.getElementById('overlay').addEventListener('click', closeCart);
 
 /* Guarded like checkoutFormEl above -- none of this exists when the empty-cart
    state has already replaced #checkoutMain's innerHTML. */
-var cardNumberEl = document.getElementById('cfCardNumber');
-if (cardNumberEl) {
-  var cardFieldEls = [cardNumberEl, document.getElementById('cfCardName'), document.getElementById('cfCardExpiry'), document.getElementById('cfCardCvc')];
+/* Card payments run through Square's Web Payments SDK: the card fields live
+   inside Square's own secure iframe (#card-container), so raw card numbers
+   never touch this page or our server. The Worker at /api/pay computes the
+   charge from product ids, not from prices sent by the browser. */
+var squareCard = null;
+var squareCardLoading = null;
+function setCardStatus(msg) { var el = document.getElementById('cardStatus'); if (el) el.textContent = msg; }
+
+function loadSquareCard() {
+  if (squareCardLoading) return squareCardLoading;
+  squareCardLoading = fetch('/api/square-config')
+    .then(function(r){ return r.json().then(function(d){ if (!r.ok) throw new Error(d.error || 'unavailable'); return d; }); })
+    .then(function(cfg) {
+      if (!window.Square) throw new Error('Square failed to load');
+      return window.Square.payments(cfg.appId, cfg.locationId).card();
+    })
+    .then(function(card) {
+      return card.attach('#card-container').then(function(){ squareCard = card; setCardStatus(''); });
+    })
+    .catch(function(err) {
+      console.error(err);
+      squareCardLoading = null;
+      setCardStatus('Card payments are unavailable right now. Please choose "Confirm by Phone / WhatsApp" or try again later.');
+    });
+  return squareCardLoading;
+}
+
+function selectedPayMethod() {
+  var checked = document.querySelector('input[name="pay"]:checked');
+  return checked ? checked.value : 'phone';
+}
+
+if (document.getElementById('cardFields')) {
   document.querySelectorAll('.pay-option').forEach(function(opt) {
     opt.addEventListener('click', function() {
       document.querySelectorAll('.pay-option').forEach(function(o){o.classList.remove('active')});
@@ -448,23 +480,8 @@ if (cardNumberEl) {
       var isCard = opt.id === 'payCardOption';
       document.getElementById('cardFields').style.display = isCard ? 'block' : 'none';
       document.getElementById('paySecureNote').style.display = isCard ? 'flex' : 'none';
-      cardFieldEls.forEach(function(el){ el.required = isCard; });
+      if (isCard) loadSquareCard();
     });
-  });
-
-  /* Light input formatting for the card fields -- cosmetic only, no real
-     payment processor wired up yet (Travis will connect one later, same
-     stub-then-wire pattern as the Psychotic Love checkout). */
-  cardNumberEl.addEventListener('input', function(e) {
-    var digits = e.target.value.replace(/\D/g,'').slice(0,16);
-    e.target.value = digits.replace(/(.{4})/g,'$1 ').trim();
-  });
-  document.getElementById('cfCardExpiry').addEventListener('input', function(e) {
-    var digits = e.target.value.replace(/\D/g,'').slice(0,4);
-    e.target.value = digits.length > 2 ? digits.slice(0,2) + ' / ' + digits.slice(2) : digits;
-  });
-  document.getElementById('cfCardCvc').addEventListener('input', function(e) {
-    e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
   });
 }
 
@@ -500,21 +517,92 @@ document.addEventListener('click', function(e) {
   pageTransitionOut(a.getAttribute('href'));
 });
 
-/* Submit -- no live payment processor wired up yet (same stub status as
-   the contact form), so this confirms client-side and clears the cart,
-   matching the behavior the old checkout modal already had.
+/* Submit. "Confirm by Phone / WhatsApp" still confirms client-side (she
+   follows up personally); "Card" charges through Square first and only
+   shows the confirmation once the payment actually succeeds.
    Guarded with a null-check: an empty cart replaces #checkoutMain's
    innerHTML (including this form) with an empty-state message, so this
    element genuinely doesn't exist on that render pass. */
-var checkoutFormEl = document.getElementById('checkoutForm');
-if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
-  e.preventDefault();
+function showConfirmation(paidByCard) {
   cart = [];
   localStorage.setItem('amg_cart', '[]');
   document.getElementById('cartCount').textContent = '0';
+  if (paidByCard) {
+    document.getElementById('confirmMsg').textContent = 'Thank you for shopping with A.M. Glow Up. Your payment went through and your order is confirmed — we\'ll reach out by phone or WhatsApp with shipping details.';
+  }
   document.getElementById('checkoutMain').style.display = 'none';
   document.getElementById('checkoutConfirm').style.display = 'block';
   window.scrollTo(0,0);
+}
+
+function showPayError(msg) {
+  var el = document.getElementById('payError');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+var checkoutFormEl = document.getElementById('checkoutForm');
+if (checkoutFormEl) checkoutFormEl.addEventListener('submit', function(e) {
+  e.preventDefault();
+  showPayError('');
+  if (selectedPayMethod() !== 'card') { showConfirmation(false); return; }
+
+  var btn = document.getElementById('placeOrderBtn');
+  var val = function(id){ return document.getElementById(id).value.trim(); };
+  var customer = {
+    name: val('cfName'), phone: val('cfPhone'), email: val('cfEmail'),
+    address: val('cfAddress'), city: val('cfCity'), state: val('cfState'), zip: val('cfZip')
+  };
+  var nameParts = customer.name.split(/\s+/);
+  var subtotal = cart.reduce(function(s,l){ var p = PRODUCTS.find(function(x){return x.id===l.id}); return s + (p ? p.price * l.qty : 0); }, 0);
+  var total = subtotal + (subtotal >= 99 ? 0 : 8);
+
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  var reset = function(){ btn.disabled = false; btn.textContent = 'Place Order'; };
+
+  loadSquareCard().then(function() {
+    if (!squareCard) throw { userMessage: 'Card payments are unavailable right now. Please choose "Confirm by Phone / WhatsApp".' };
+    return squareCard.tokenize({
+      amount: total.toFixed(2),
+      currencyCode: 'USD',
+      intent: 'CHARGE',
+      customerInitiated: true,
+      sellerKeyedIn: false,
+      billingContact: {
+        givenName: nameParts[0] || '',
+        familyName: nameParts.slice(1).join(' '),
+        email: customer.email,
+        phone: customer.phone,
+        addressLines: [customer.address],
+        city: customer.city,
+        state: customer.state,
+        postalCode: customer.zip,
+        countryCode: 'US'
+      }
+    });
+  }).then(function(result) {
+    if (result.status !== 'OK') throw { userMessage: 'Please check your card details and try again.' };
+    return fetch('/api/pay', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        sourceId: result.token,
+        verificationToken: result.verificationToken,
+        items: cart.map(function(l){ return { id: l.id, qty: l.qty }; }),
+        customer: customer
+      })
+    });
+  }).then(function(r) {
+    return r.json().then(function(d) {
+      if (!r.ok || !d.ok) throw { userMessage: d.error || 'Payment didn\'t go through. Please try again.' };
+      showConfirmation(true);
+    });
+  }).catch(function(err) {
+    console.error(err);
+    showPayError((err && err.userMessage) || 'Something went wrong. Please try again, or call us if you see a charge on your card.');
+    reset();
+  });
 });
 </script>
 

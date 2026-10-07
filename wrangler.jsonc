@@ -5,8 +5,18 @@
   "observability": {
     "enabled": true
   },
+  "main": "worker/index.js",
+  // The Worker only handles /api/* (Square payments); every other path is
+  // served directly from static assets without invoking it.
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // Public Square Application ID (it ships to the browser anyway). The
+  // access token is a secret: `npx wrangler secret put SQUARE_ACCESS_TOKEN`.
+  "vars": {
+    "SQUARE_APP_ID": "sq0idp-YCXHUPV4MmRrr7P1VA6VHw"
   },
   "compatibility_flags": [
     "nodejs_compat"
