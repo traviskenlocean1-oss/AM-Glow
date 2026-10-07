@@ -20,8 +20,11 @@ const FREE_SHIPPING_MIN_CENTS = 9900;
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    /* One canonical host for SEO: www.amglowup.com -> amglowup.com. */
-    if (url.hostname === 'www.amglowup.com') {
+    /* One canonical, secure host for SEO: http:// and www. both 301 to
+       https://amglowup.com. */
+    if ((url.hostname === 'amglowup.com' || url.hostname === 'www.amglowup.com') &&
+        (url.protocol === 'http:' || url.hostname === 'www.amglowup.com')) {
+      url.protocol = 'https:';
       url.hostname = 'amglowup.com';
       return Response.redirect(url.toString(), 301);
     }
