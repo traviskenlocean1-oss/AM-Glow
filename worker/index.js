@@ -83,7 +83,7 @@ async function squareConfig(env) {
 let cachedCatalog = null;
 async function getCatalog(env, request) {
   if (cachedCatalog) return cachedCatalog;
-  const res = await env.ASSETS.fetch(new URL('/checkout.html', request.url));
+  const res = await env.ASSETS.fetch(new URL('/checkout', request.url));
   const html = await res.text();
   const catalog = new Map();
   const re = /\{\s*id:\s*(\d+),\s*name:\s*'((?:\\'|[^'])*)',\s*price:\s*(\d+(?:\.\d+)?)/g;
