@@ -6,6 +6,11 @@
     "enabled": true
   },
   "main": "worker/index.js",
+  // Her real domain (bought on Namecheap, nameservers pointed at Cloudflare).
+  "routes": [
+    { "pattern": "amglowup.com", "custom_domain": true },
+    { "pattern": "www.amglowup.com", "custom_domain": true }
+  ],
   // The Worker only handles /api/* (Square payments); every other path is
   // served directly from static assets without invoking it.
   "assets": {
