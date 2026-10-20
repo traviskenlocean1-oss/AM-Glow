@@ -29,5 +29,10 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  // Per-IP attempt limits used by worker/index.js.
+  "ratelimits": [
+    { "name": "RL_PAY", "namespace_id": "2101", "simple": { "limit": 5, "period": 60 } },
+    { "name": "RL_ORDER", "namespace_id": "2102", "simple": { "limit": 5, "period": 60 } }
   ]
 }

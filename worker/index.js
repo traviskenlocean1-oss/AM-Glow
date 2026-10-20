@@ -17,6 +17,22 @@ const SQUARE_VERSION = '2025-01-23';
 const SHIPPING_CENTS = 800;
 const FREE_SHIPPING_MIN_CENTS = 9900;
 
+/* Per-IP attempt limits (rate-limit bindings in wrangler.jsonc). Stops
+   card-testing bots on /api/pay and order-email spam on /api/order. */
+async function allowed(limiter, request, url) {
+  if (!limiter) return true;
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const { success } = await limiter.limit({ key: ip + ':' + url.pathname });
+  return success;
+}
+
+function tooMany() {
+  return new Response(JSON.stringify({ error: 'Too many attempts. Wait a minute and try again.' }), {
+    status: 429,
+    headers: { 'Content-Type': 'application/json', 'Retry-After': '60' }
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -32,9 +48,11 @@ export default {
       return squareConfig(env);
     }
     if (url.pathname === '/api/pay' && request.method === 'POST') {
+      if (!(await allowed(env.RL_PAY, request, url))) return tooMany();
       return pay(request, env, ctx);
     }
     if (url.pathname === '/api/order' && request.method === 'POST') {
+      if (!(await allowed(env.RL_ORDER, request, url))) return tooMany();
       return phoneOrder(request, env);
     }
     if (url.pathname.startsWith('/api/')) {
